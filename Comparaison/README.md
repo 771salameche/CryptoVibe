@@ -1,19 +1,23 @@
-# Rapport d'Évaluation des Modèles de Sentiment
+# Rapport d'ï¿½valuation des Modï¿½les de Sentiment
 
-Ce rapport compare les performances de VADER (avec lexique crypto) et FinBERT sur un ensemble de données de validation étiquetées manuellement.
+Ce rapport compare les performances de VADER, FinBERT et RoBERTa sur un ensemble de donnï¿½es de validation ï¿½tiquetï¿½es manuellement.
 
-## Tableau Comparatif des Métriques
-| Modèle   | Accuracy | Precision (Weighted) | Recall (Weighted) | F1-score (Weighted) |
+## Tableau Comparatif des Mï¿½triques
+| Modï¿½le   | Accuracy | Precision (Weighted) | Recall (Weighted) | F1-score (Weighted) |
 |----------|----------|----------------------|-------------------|---------------------|
 | VADER | 0.4750 | 0.4832 | 0.4750 | 0.4764 |
-| FinBERT | 0.5167 | 0.6361 | 0.5167 | 0.4721 |
+| FINBERT | 0.5167 | 0.6361 | 0.5167 | 0.4721 |
+| ROBERTA | 0.5500 | 0.5954 | 0.5500 | 0.5355 |
 
 ## Matrices de Confusion
 ### VADER
 ![Matrice de Confusion VADER](confusion_matrix_VADER.png)
 
-### FinBERT
-![Matrice de Confusion FinBERT](confusion_matrix_FinBERT.png)
+### FINBERT
+![Matrice de Confusion FINBERT](confusion_matrix_FINBERT.png)
+
+### ROBERTA
+![Matrice de Confusion ROBERTA](confusion_matrix_ROBERTA.png)
 
 ## Analyse des Erreurs
-Une analyse plus approfondie des cas où les modèles se trompent peut être effectuée pour identifier les faiblesses (par exemple, sarcasme, contexte complexe).
+Une analyse plus approfondie des cas oï¿½ les modï¿½les se trompent peut ï¿½tre effectuï¿½e pour identifier les faiblesses.

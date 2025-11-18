@@ -43,24 +43,26 @@ def load_and_merge_data():
         
         # Garder uniquement les colonnes pertinentes pour la fusion
         df_vader = df_vader[['id', 'crypto_sentiment']]
-        df_transformer = df_transformer[['id', 'finbert_label', 'cleaned_text']] # Garder cleaned_text ici
+        df_transformer = df_transformer[['id', 'finbert_label', 'twitter_roberta_label', 'cleaned_text']]
         
         # Fusionner les résultats
-        df_merged = pd.merge(df_labeled, df_transformer, on='id', how='left') # Fusionner avec transformer en premier
+        df_merged = pd.merge(df_labeled, df_transformer, on='id', how='left')
         df_merged = pd.merge(df_merged, df_vader, on='id', how='left')
         
-        # Renommer les colonnes pour plus de clarté (les prédictions VADER et FinBERT sont déjà en majuscules)
+        # Renommer les colonnes pour plus de clarté
         df_merged.rename(columns={
             'crypto_sentiment': 'vader_pred',
-            'finbert_label': 'finbert_pred'
+            'finbert_label': 'finbert_pred',
+            'twitter_roberta_label': 'roberta_pred'
         }, inplace=True)
         
         # Assurer que les labels sont en majuscules pour la comparaison
-        df_merged['vader_pred'] = df_merged['vader_pred'].str.upper()
-        df_merged['finbert_pred'] = df_merged['finbert_pred'].str.upper()
+        for col in ['ground_truth', 'vader_pred', 'finbert_pred', 'roberta_pred']:
+            if col in df_merged.columns:
+                df_merged[col] = df_merged[col].str.upper()
             
         logging.info(f"Données fusionnées, {len(df_merged)} lignes prêtes pour l'évaluation.")
-        return df_merged.dropna(subset=['ground_truth', 'vader_pred', 'finbert_pred'])
+        return df_merged.dropna(subset=['ground_truth', 'vader_pred', 'finbert_pred', 'roberta_pred'])
 
     except FileNotFoundError as e:
         logging.error(f"Erreur de fichier non trouvé: {e}. Arrêt.")
@@ -75,16 +77,17 @@ def evaluate_model(df, model_name):
     y_pred = df[f'{model_name}_pred']
     
     accuracy = accuracy_score(y_true, y_pred)
-    report = classification_report(y_true, y_pred, output_dict=True)
+    report = classification_report(y_true, y_pred, output_dict=True, zero_division=0)
     
     logging.info(f"\n--- Évaluation pour le modèle: {model_name} ---")
     logging.info(f"Accuracy: {accuracy:.4f}")
-    logging.info("Rapport de classification:\n" + classification_report(y_true, y_pred))
+    logging.info("Rapport de classification:\n" + classification_report(y_true, y_pred, zero_division=0))
     
     # Matrice de confusion
-    cm = confusion_matrix(y_true, y_pred, labels=['POSITIVE', 'NEGATIVE', 'NEUTRAL'])
+    labels = ['POSITIVE', 'NEGATIVE', 'NEUTRAL']
+    cm = confusion_matrix(y_true, y_pred, labels=labels)
     plt.figure(figsize=(8, 6))
-    sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', xticklabels=['POSITIVE', 'NEGATIVE', 'NEUTRAL'], yticklabels=['POSITIVE', 'NEGATIVE', 'NEUTRAL'])
+    sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', xticklabels=labels, yticklabels=labels)
     plt.title(f'Matrice de Confusion - {model_name}')
     plt.xlabel('Prédiction')
     plt.ylabel('Vérité Terrain')
@@ -99,7 +102,7 @@ def create_readme_report(metrics):
     """Génère un rapport d'évaluation en Markdown."""
     with open(README_FILE, 'w') as f:
         f.write("# Rapport d'Évaluation des Modèles de Sentiment\n\n")
-        f.write("Ce rapport compare les performances de VADER (avec lexique crypto) et FinBERT sur un ensemble de données de validation étiquetées manuellement.\n\n")
+        f.write("Ce rapport compare les performances de VADER, FinBERT et RoBERTa sur un ensemble de données de validation étiquetées manuellement.\n\n")
         
         f.write("## Tableau Comparatif des Métriques\n")
         f.write("| Modèle   | Accuracy | Precision (Weighted) | Recall (Weighted) | F1-score (Weighted) |\n")
@@ -113,8 +116,7 @@ def create_readme_report(metrics):
             f.write(f"![Matrice de Confusion {model}](confusion_matrix_{model}.png)\n\n")
             
         f.write("## Analyse des Erreurs\n")
-        # Vous pouvez ajouter ici une analyse plus détaillée des erreurs
-        f.write("Une analyse plus approfondie des cas où les modèles se trompent peut être effectuée pour identifier les faiblesses (par exemple, sarcasme, contexte complexe).\n")
+        f.write("Une analyse plus approfondie des cas où les modèles se trompent peut être effectuée pour identifier les faiblesses.\n")
 
     logging.info(f"Rapport d'évaluation sauvegardé à {README_FILE}")
 
@@ -126,20 +128,17 @@ def main():
     os.makedirs(OUTPUT_DIR, exist_ok=True)
     
     all_metrics = {}
+    models_to_evaluate = ['vader', 'finbert', 'roberta']
     
-    # Évaluation de VADER
-    vader_accuracy, vader_report, _ = evaluate_model(df, 'vader')
-    all_metrics['VADER'] = {'accuracy': vader_accuracy, 'report': vader_report}
-    
-    # Évaluation de FinBERT
-    finbert_accuracy, finbert_report, _ = evaluate_model(df, 'finbert')
-    all_metrics['FinBERT'] = {'accuracy': finbert_accuracy, 'report': finbert_report}
+    for model_name in models_to_evaluate:
+        accuracy, report, _ = evaluate_model(df, model_name)
+        all_metrics[model_name.upper()] = {'accuracy': accuracy, 'report': report}
     
     # Création du rapport README
     create_readme_report(all_metrics)
     
-    # Analyse des erreurs
-    logging.info("\n--- Analyse des Erreurs ---")
+    # Analyse des erreurs pour le meilleur modèle (par exemple, FinBERT)
+    logging.info("\n--- Analyse des Erreurs (FinBERT) ---")
     error_df = df[df['ground_truth'] != df['finbert_pred']]
     logging.info(f"FinBERT a fait {len(error_df)} erreurs. Exemples:")
     for _, row in error_df.head(5).iterrows():

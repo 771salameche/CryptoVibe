@@ -1,0 +1,20 @@
+id: Unique identifier for the post.
+text: The original text content of the post.
+date: The date and time the post was created.
+source: The platform the post originated from (e.g., Reddit).
+author: The author of the post.
+engagement: A measure of engagement (e.g., upvotes, likes).
+sentiment_label: Categorical sentiment (Positive, Negative, Neutral).
+vader_compound_score: Sentiment score from VADER (-1 to 1).
+cryptos_mentioned: List of canonical crypto names mentioned.
+exchanges_mentioned: List of crypto exchanges mentioned.
+influencers_mentioned: List of key influencers mentioned.
+events_detected: List of detected event dictionaries (type, snippet, etc.).
+event_types: A simple list of event types found.
+price_open: Opening price of a mentioned crypto on the post date.
+price_close: Closing price of a mentioned crypto on the post date.
+price_change_pct: Percentage price change on the post date.
+volume: Trading volume on the post date.
+text_length: Number of characters in the post text.
+emoji_count: Number of emojis in the post text.
+hashtag_count: Number of hashtags in the post text.

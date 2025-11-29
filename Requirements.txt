@@ -15,6 +15,7 @@ nltk
 transformers
 spacy
 tqdm
+vaderSentiment
 
 # Visualisation
 matplotlib

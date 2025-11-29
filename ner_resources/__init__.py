@@ -1,0 +1,1 @@
+# This file makes the 'ner_resources' directory a Python package.

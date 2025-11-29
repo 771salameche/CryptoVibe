@@ -13,6 +13,8 @@ numpy
 # NLP
 nltk
 transformers
+spacy
+tqdm
 
 # Visualisation
 matplotlib

@@ -2,3 +2,5 @@ myenv/
 .env
 __pycache__/        
 reddit_scraper.log
+kaggle/
+mbsa.csv/

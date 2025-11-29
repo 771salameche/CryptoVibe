@@ -125,8 +125,8 @@ def main():
     df = pd.read_csv(INPUT_CSV_PATH)
     
     # Ensure 'text' column exists and handle potential NaN values
-    if 'cleaned_text' not in df.columns:
-        print("Error: 'cleaned_text' column not found in the CSV file. Please ensure the input CSV contains this column.")
+    if 'text' not in df.columns:
+        print("Error: 'text' column not found in the CSV file.")
         return
     df['text'] = df['cleaned_text'].astype(str)
 

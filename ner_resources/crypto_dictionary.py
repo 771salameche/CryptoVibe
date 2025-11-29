@@ -1,5 +1,8 @@
-"Bitcoin": ["Bitcoin", "bitcoin", "BTC", "btc", "\u20bf"],
-    "Ethereum": ["Ethereum", "ethereum", "ETH", "eth", "\u039e"],
+import re
+
+CRYPTOCURRENCIES = {
+    "Bitcoin": ["Bitcoin", "bitcoin", "BTC", "btc", "\u20bf"],
+    "Ethereum": ["Ethereum", "ethereum", "ETH", "eth", "\u039e"], # U+039E Greek Capital Letter Xi, ETH is the more common identifier
     "Tether": ["Tether", "tether", "USDT", "usdt"],
     "XRP": ["XRP", "xrp"],
     "BNB": ["BNB", "bnb"],
@@ -180,7 +183,7 @@ if __name__ == "__main__":
     Don't get rekt by the next rug pull! Always check the exchange, like gate.io.
     """
 
-    print("---" + "-" * 25 + " Testing NER Extraction Functions " + "-" * 25 + "---" + "\n")
+    print("-" * 10 + " Testing NER Extraction Functions " + "-" * 10 + "\n")
     print(f"Test Text:\n{test_text}\n")
 
     # Test crypto extraction
@@ -205,9 +208,9 @@ if __name__ == "__main__":
     print(f"Found Cryptocurrencies: {found_cryptos_edge}")
     assert found_cryptos_edge == ["Cardano"]
 
-    print("\n---" + "-" * 25 + " All tests passed successfully! " + "-" * 25 + "---")
+    print("\n" + "-" * 10 + " All tests passed successfully! " + "-" * 10)
 
-    print("\n---" + "-" * 25 + " Dictionary and Term Examples " + "-" * 25 + "---")
+    print("\n" + "-" * 10 + " Dictionary and Term Examples " + "-" * 10)
     print(f"\nTop 5 Cryptos: {list(CRYPTOCURRENCIES.keys())[:5]}")
     print(f"Top 5 Exchanges: {list(EXCHANGES.keys())[:5]}")
     print(f"Positive Terms: {CRYPTO_TERMS['positive'][:5]}")

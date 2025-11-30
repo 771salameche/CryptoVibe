@@ -4,17 +4,7 @@ praw
 kagglehub[pandas-datasets]
 
 # Configuration
-python-dotenv
-
-# Data Processing
-pandas
-numpy
-
-# NLP
-nltk
-transformers
-spacy
-tqdm
+yfinance
 vaderSentiment
 
 # Visualisation

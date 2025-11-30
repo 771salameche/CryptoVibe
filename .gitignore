@@ -4,3 +4,4 @@ __pycache__/
 reddit_scraper.log
 kaggle/
 mbsa.csv/
+.cache

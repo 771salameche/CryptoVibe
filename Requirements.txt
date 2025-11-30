@@ -7,6 +7,15 @@ kagglehub[pandas-datasets]
 yfinance
 vaderSentiment
 
+# Data Processing & NLP
+pandas
+numpy
+nltk
+transformers
+spacy
+tqdm
+scipy
+
 # Visualisation
 matplotlib
 seaborn

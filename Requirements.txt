@@ -15,6 +15,7 @@ transformers
 spacy
 tqdm
 scipy
+statsmodels
 
 # Visualisation
 matplotlib

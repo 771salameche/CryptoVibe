@@ -1,0 +1,20 @@
+# Lag Analysis Report
+
+
+This report identifies the optimal time delay (lag) where social media sentiment shows the strongest correlation with cryptocurrency price changes.
+
+
+## Summary of Findings
+
+| Crypto   |   Optimal Lag (Days) |   Pearson r |   P-value | Significant?   | Interpretation                                |
+|:---------|---------------------:|------------:|----------:|:---------------|:----------------------------------------------|
+| BTC      |                    3 |     -0.3114 |    0.0447 | Yes            | Significant correlation found at a 3-day lag. |
+| ETH      |                    1 |     -0.2597 |    0.0926 | No             | No statistically significant lag found.       |
+| SOL      |                    3 |      0.3496 |    0.0232 | Yes            | Significant correlation found at a 3-day lag. |
+
+
+## Recommendations & Insights
+
+- **BTC:** A statistically significant negative correlation exists when sentiment leads price by **3 day(s)**. This suggests that shifts in sentiment may be a useful predictor for this asset.
+- **ETH:** No significant predictive link was found between daily sentiment and future price changes within the tested lag period.
+- **SOL:** A statistically significant positive correlation exists when sentiment leads price by **3 day(s)**. This suggests that shifts in sentiment may be a useful predictor for this asset.

@@ -126,33 +126,34 @@ def main():
             
             # Explode dataframe to merge prices for each mentioned crypto
             df_exploded = df.explode('cryptos_mentioned').rename(columns={'cryptos_mentioned': 'crypto'})
+            # Drop rows where crypto_mentioned was empty (resulting in NaN in 'crypto' after explode)
+            df_exploded.dropna(subset=['crypto'], inplace=True) 
             df_merged = pd.merge(df_exploded, price_df, on=['date_only', 'crypto'], how='left')
             
-            # Aggregate back, keeping first non-null price if multiple cryptos match
-            price_cols = ['price_open', 'price_close', 'price_change_pct', 'volume']
-            agg_dict = {col: 'first' for col in df.columns if col not in ['id']}
-            for p_col in price_cols:
-                if p_col in df_merged.columns:
-                    agg_dict[p_col] = 'first'
-                else:
-                    df[p_col] = np.nan # Add empty col if not in price data
-            
-            df = df_merged.groupby('id').agg(agg_dict).reset_index()
+            # The merged_df now contains one row per (post_id, crypto_mentioned) combination
+            # This is the desired granularity for correlation analysis.
+            df = df_merged.copy()
             df.drop(columns=['date_only'], inplace=True)
-            report_lines.append("Successfully merged price data.")
+            report_lines.append("Successfully merged price data. Dataset is now at post-crypto granularity.")
         except Exception as e:
-            report_lines.append(f"Error merging price data: {e}. Proceeding without it.")
+            report_lines.append(f"Error merging price data: {e}. Proceeding without it (original df retained).")
+            # If merge fails, revert to original df structure (without price data)
+            df.drop(columns=['date_only'], inplace=True, errors='ignore') # remove if it was added
             
     # 5. Final Schema & Summary
     final_schema = [
         'id', 'text', 'date', 'source', 'author', 'engagement',
         'sentiment_label', 'vader_compound_score',
-        'cryptos_mentioned', 'exchanges_mentioned', 'influencers_mentioned',
+        'crypto', 'exchanges_mentioned', 'influencers_mentioned', # 'crypto' is now the specific crypto for this row
         'events_detected', 'event_types',
         'price_open', 'price_close', 'price_change_pct', 'volume',
         'text_length', 'emoji_count', 'hashtag_count'
     ]
     # Add columns that might be missing, and reorder
+    # Ensure 'crypto' is not a list in this context, it's the specific crypto for the row
+    if 'cryptos_mentioned' in df.columns:
+        df.drop(columns=['cryptos_mentioned'], inplace=True, errors='ignore')
+
     for col in final_schema:
         if col not in df.columns:
             df[col] = np.nan
@@ -180,15 +181,15 @@ def main():
         'engagement': 'A measure of engagement (e.g., upvotes, likes).',
         'sentiment_label': 'Categorical sentiment (Positive, Negative, Neutral).',
         'vader_compound_score': 'Sentiment score from VADER (-1 to 1).',
-        'cryptos_mentioned': 'List of canonical crypto names mentioned.',
+        'crypto': 'The specific cryptocurrency mentioned in this post/row.', # Updated description
         'exchanges_mentioned': 'List of crypto exchanges mentioned.',
         'influencers_mentioned': 'List of key influencers mentioned.',
         'events_detected': 'List of detected event dictionaries (type, snippet, etc.).',
         'event_types': 'A simple list of event types found.',
-        'price_open': 'Opening price of a mentioned crypto on the post date.',
-        'price_close': 'Closing price of a mentioned crypto on the post date.',
-        'price_change_pct': 'Percentage price change on the post date.',
-        'volume': 'Trading volume on the post date.',
+        'price_open': 'Opening price of the mentioned crypto on the post date.',
+        'price_close': 'Closing price of the mentioned crypto on the post date.',
+        'price_change_pct': 'Percentage price change of the mentioned crypto on the post date.',
+        'volume': 'Trading volume of the mentioned crypto on the post date.',
         'text_length': 'Number of characters in the post text.',
         'emoji_count': 'Number of emojis in the post text.',
         'hashtag_count': 'Number of hashtags in the post text.'

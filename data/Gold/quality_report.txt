@@ -1,0 +1,34 @@
+Initial analysis of data/Results/data_with_events.csv
+========================================
+Initial row count: 24611
+Dropped 0 rows with missing 'id' or 'text'.
+Dropped 0 duplicate rows based on 'id'.
+Validated 'vader_compound_score' is between -1 and 1. Found 0 invalid scores.
+Error merging price data: 'date_only'. Proceeding without it (original df retained).
+
+Final Dataset Summary
+========================================
+Final row count: 24611
+Final column count: 20
+
+Column Completeness (%):
+id                       100.000000
+text                     100.000000
+date                     100.000000
+source                   100.000000
+author                   100.000000
+engagement                10.284019
+sentiment_label          100.000000
+vader_compound_score     100.000000
+crypto                     0.000000
+exchanges_mentioned      100.000000
+influencers_mentioned    100.000000
+events_detected           97.249198
+event_types              100.000000
+price_open                 0.000000
+price_close                0.000000
+price_change_pct           0.000000
+volume                     0.000000
+text_length              100.000000
+emoji_count              100.000000
+hashtag_count            100.000000

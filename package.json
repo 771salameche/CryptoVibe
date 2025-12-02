@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "@types/papaparse": "^5.5.1",
+    "lucide-react": "^0.555.0",
+    "papaparse": "^5.5.3",
+    "recharts": "^3.5.1"
+  }
+}

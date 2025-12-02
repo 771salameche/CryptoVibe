@@ -5,3 +5,5 @@ reddit_scraper.log
 kaggle/
 mbsa.csv/
 .cache
+node_modules/
+.vscode/

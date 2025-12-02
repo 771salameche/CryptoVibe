@@ -1,0 +1,11 @@
+date,event_type,crypto,mention_count,avg_sentiment,total_importance
+2025-10-19,Market Crash,Bitcoin,8,-0.0868625,3249.0
+2025-11-04,Market Crash,Bitcoin,7,-0.0518571428571428,2751.0
+2025-11-07,Network Outage,Bitcoin,3,0.2744666666666666,2063.0
+2025-10-18,Market Crash,Bitcoin,4,0.0652,1975.0
+2025-11-04,Network Outage,Bitcoin,1,0.6249,1936.0
+2025-10-18,Network Outage,Bitcoin,5,0.139,1456.0
+2025-10-19,Regulatory Action,Bitcoin,7,0.1308,1163.0
+2025-10-21,Market Crash,Bitcoin,14,-0.0962142857142857,1146.0
+2025-11-03,Market Crash,Bitcoin,3,0.2721333333333333,1138.0
+2025-11-04,Market Crash,Ethereum,2,-0.20095,992.0

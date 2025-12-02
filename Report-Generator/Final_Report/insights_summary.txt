@@ -1,0 +1,5 @@
+Executive Summary:
+
+The strongest predictive signal was for **SOL**, where sentiment showed a statistically significant **positive correlation** with price changes **3 day(s) later** (r=0.3496).
+The overall same-day sentiment-price relationship is generally **weak** (average |r| ~ 0.121) and not statistically significant after corrections.
+While strong immediate correlations are weak, lag analysis suggests that for some assets (like SOL and BTC), sentiment may act as a leading indicator, preceding price movements by several days.

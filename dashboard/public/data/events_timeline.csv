@@ -1,0 +1,409 @@
+date,event_type,crypto,mention_count,avg_sentiment,total_importance
+2025-11-11,Regulatory Action,Bitcoin,1,-0.1779,8.0
+2025-11-10,Hack / Exploit,Bitcoin,1,-0.5165,126.0
+2025-11-10,Market Crash,Bitcoin,2,0.3045,100.0
+2025-11-10,Network Outage,Bitcoin,1,0.0,50.0
+2025-11-08,Network Outage,Bitcoin,1,0.0,81.0
+2025-11-07,Network Outage,Bitcoin,3,0.27446666666666664,2063.0
+2025-11-07,Market Crash,Ethereum Classic,1,0.296,140.0
+2025-11-06,Network Outage,Bitcoin,2,-0.2608,658.0
+2025-11-06,Market Crash,Bitcoin,2,-0.3062,385.0
+2025-11-06,Regulatory Action,Bitcoin,1,-0.4404,21.0
+2025-11-06,Network Outage,Ethereum,1,-0.4503,16.0
+2025-11-06,Network Outage,NEAR Protocol,1,-0.4503,16.0
+2025-11-05,Market Crash,Bitcoin,2,-0.44335,429.0
+2025-11-05,Hack / Exploit,Bitcoin,1,-0.1771,206.0
+2025-11-05,Network Outage,Bitcoin,1,0.0,142.0
+2025-11-05,Network Outage,Ethereum,1,0.4404,31.0
+2025-11-05,Regulatory Action,Ethereum,1,0.4404,31.0
+2025-11-04,Market Crash,Bitcoin,7,-0.05185714285714286,2751.0
+2025-11-04,Network Outage,Bitcoin,1,0.6249,1936.0
+2025-11-04,Market Crash,Ethereum,2,-0.20095,992.0
+2025-11-04,Market Crash,XRP,2,0.07385,501.0
+2025-11-04,Hack / Exploit,Ethereum,1,-0.0396,217.0
+2025-11-04,Market Crash,Solana,1,0.1477,10.0
+2025-11-04,Network Outage,Ethereum,1,0.7906,8.0
+2025-11-04,Network Outage,XRP,1,0.5859,8.0
+2025-11-04,Network Outage,Hyperliquid,1,-0.128,4.0
+2025-11-04,Market Crash,Chainlink,1,0.7833,3.0
+2025-11-03,Market Crash,Bitcoin,3,0.27213333333333334,1138.0
+2025-11-03,Market Crash,Dogecoin,1,0.2023,359.0
+2025-11-03,Market Crash,Ethereum,1,0.2023,359.0
+2025-11-03,Regulatory Action,Bitcoin,1,0.8432,214.0
+2025-11-03,Network Outage,Bitcoin,1,0.3612,10.0
+2025-11-02,Regulatory Action,Bitcoin,1,0.4927,28.0
+2025-11-02,Regulatory Action,Ethereum,1,0.4927,28.0
+2025-11-01,Regulatory Action,Bitcoin,5,0.32422,656.0
+2025-11-01,Network Outage,Ethereum,1,0.8814,26.0
+2025-11-01,Network Outage,Bitcoin,9,0.10188888888888889,9.0
+2025-11-01,Market Crash,Bitcoin,7,0.23812857142857144,7.0
+2025-11-01,Market Crash,Dogecoin,1,0.5154,1.0
+2025-11-01,Market Crash,Ethereum,1,0.9231,1.0
+2025-11-01,Market Crash,Monero,1,0.9231,1.0
+2025-11-01,Market Crash,Tether,1,0.8687,1.0
+2025-11-01,Network Outage,Cardano,1,-0.4588,1.0
+2025-11-01,Network Outage,Dogecoin,1,0.5154,1.0
+2025-11-01,Network Outage,Zcash,1,0.8689,1.0
+2025-11-01,Regulatory Action,Cardano,1,-0.4588,1.0
+2025-11-01,Regulatory Action,Ethereum,1,0.5267,1.0
+2025-11-01,Regulatory Action,Ethereum Classic,1,-0.9468,1.0
+2025-11-01,Regulatory Action,Polkadot,1,0.0,1.0
+2025-11-01,Regulatory Action,Solana,1,0.6808,1.0
+2025-10-31,Regulatory Action,Bitcoin,8,0.6339125,90.0
+2025-10-31,Regulatory Action,Cronos,1,0.5228,83.0
+2025-10-31,Regulatory Action,Ethereum Classic,1,0.5228,83.0
+2025-10-31,Market Crash,Bitcoin,7,0.3066,57.0
+2025-10-31,Market Crash,Ethereum,3,-0.38810000000000006,29.0
+2025-10-31,Network Outage,Bitcoin,7,0.1055142857142857,7.0
+2025-10-31,Network Outage,Dogecoin,3,-0.15153333333333333,3.0
+2025-10-31,Exchange Listing,Dogecoin,2,0.34895,2.0
+2025-10-31,Network Outage,Ethereum,2,-0.16455,2.0
+2025-10-31,Regulatory Action,Dogecoin,2,-0.22474999999999998,2.0
+2025-10-31,Market Crash,Aster,1,-0.3182,1.0
+2025-10-31,Network Outage,Aave,1,0.0,1.0
+2025-10-31,Network Outage,Cardano,1,0.0,1.0
+2025-10-31,Network Outage,Toncoin,1,0.4678,1.0
+2025-10-31,Regulatory Action,Hedera,1,0.34,1.0
+2025-10-30,Market Crash,Bitcoin,13,-0.3072846153846154,840.0
+2025-10-30,Regulatory Action,Bitcoin,8,0.2027625,295.0
+2025-10-30,Network Outage,Bitcoin,15,0.35282,15.0
+2025-10-30,Regulatory Action,Ethereum,3,0.5108666666666667,3.0
+2025-10-30,Market Crash,Ethereum Classic,2,0.6686000000000001,2.0
+2025-10-30,Market Crash,XRP,2,-0.6152500000000001,2.0
+2025-10-30,Network Outage,Ethereum,2,0.2264,2.0
+2025-10-30,Network Outage,XRP,2,-0.27270000000000005,2.0
+2025-10-30,Regulatory Action,Solana,2,0.67325,2.0
+2025-10-30,Market Crash,Ethereum,1,-0.7906,1.0
+2025-10-30,Market Crash,Solana,1,-0.296,1.0
+2025-10-30,Network Outage,NEAR Protocol,1,0.0258,1.0
+2025-10-30,Network Outage,Solana,1,-0.9042,1.0
+2025-10-30,Network Outage,Zcash,1,-0.1108,1.0
+2025-10-30,Partnership / Collaboration,Ethereum Classic,1,0.6369,1.0
+2025-10-30,Regulatory Action,Cardano,1,0.3182,1.0
+2025-10-30,Regulatory Action,Hyperliquid,1,-0.2263,1.0
+2025-10-30,Regulatory Action,XRP,1,0.6369,1.0
+2025-10-29,Hack / Exploit,Ethereum,2,0.4019,61.0
+2025-10-29,Network Outage,Bitcoin,16,0.2675125,16.0
+2025-10-29,Market Crash,Bitcoin,3,0.013133333333333294,3.0
+2025-10-29,Network Outage,Ethereum,3,0.2796,3.0
+2025-10-29,Market Crash,Ethereum,2,0.05609999999999998,2.0
+2025-10-29,Network Outage,Chainlink,2,0.431,2.0
+2025-10-29,Network Outage,XRP,2,0.41459999999999997,2.0
+2025-10-29,Exchange Listing,Bitcoin,1,0.8995,1.0
+2025-10-29,Exchange Listing,Dogecoin,1,-0.0541,1.0
+2025-10-29,Hack / Exploit,Bitcoin,1,0.1779,1.0
+2025-10-29,Market Crash,Solana,1,-0.09,1.0
+2025-10-29,Network Outage,Avalanche,1,0.6597,1.0
+2025-10-29,Network Outage,BNB,1,0.6597,1.0
+2025-10-29,Network Outage,Cardano,1,0.6597,1.0
+2025-10-29,Network Outage,Cronos,1,0.6597,1.0
+2025-10-29,Network Outage,Dogecoin,1,0.6597,1.0
+2025-10-29,Network Outage,Ethereum Classic,1,0.6597,1.0
+2025-10-29,Network Outage,Hedera,1,0.6597,1.0
+2025-10-29,Network Outage,NEAR Protocol,1,0.6953,1.0
+2025-10-29,Network Outage,Polkadot,1,0.6597,1.0
+2025-10-29,Network Outage,Solana,1,0.6597,1.0
+2025-10-29,Network Outage,TRON,1,0.6597,1.0
+2025-10-29,Regulatory Action,Bitcoin,1,0.4215,1.0
+2025-10-29,Regulatory Action,Ethereum Classic,1,0.7548,1.0
+2025-10-29,Regulatory Action,Solana,1,0.9042,1.0
+2025-10-29,Regulatory Action,XRP,1,0.0,1.0
+2025-10-28,Network Outage,Bitcoin,14,0.1902714285714286,46.0
+2025-10-28,Network Outage,Monero,2,0.0,34.0
+2025-10-28,Market Crash,Bitcoin,14,-0.12746428571428572,14.0
+2025-10-28,Regulatory Action,Bitcoin,8,0.452225,8.0
+2025-10-28,Network Outage,Hedera,2,0.049800000000000004,2.0
+2025-10-28,Exchange Listing,Bitcoin,1,0.5574,1.0
+2025-10-28,Hack / Exploit,Chainlink,1,-0.6486,1.0
+2025-10-28,Market Crash,Ethereum,1,-0.2263,1.0
+2025-10-28,Market Crash,Litecoin,1,-0.4019,1.0
+2025-10-28,Market Crash,XRP,1,-0.3182,1.0
+2025-10-28,Network Outage,Chainlink,1,0.2023,1.0
+2025-10-28,Network Outage,Ethereum,1,-0.2263,1.0
+2025-10-28,Regulatory Action,Ethereum,1,0.9531,1.0
+2025-10-28,Regulatory Action,Hyperliquid,1,0.9531,1.0
+2025-10-28,Regulatory Action,Monero,1,0.6659,1.0
+2025-10-28,Regulatory Action,Solana,1,0.9531,1.0
+2025-10-28,Regulatory Action,Zcash,1,0.9231,1.0
+2025-10-27,Market Crash,Bitcoin,2,-0.25439999999999996,532.0
+2025-10-27,Network Outage,Bitcoin,7,0.018371428571428563,7.0
+2025-10-27,Regulatory Action,Bitcoin,7,0.33794285714285716,7.0
+2025-10-27,Exchange Listing,Solana,1,0.6705,1.0
+2025-10-27,Network Outage,Ethereum,1,0.296,1.0
+2025-10-27,Network Outage,Solana,1,-0.3412,1.0
+2025-10-27,Regulatory Action,Canton,1,0.0772,1.0
+2025-10-27,Regulatory Action,Ethereum Classic,1,0.9841,1.0
+2025-10-26,Network Outage,Bitcoin,10,0.022619999999999994,10.0
+2025-10-26,Market Crash,Bitcoin,8,-0.04023749999999999,8.0
+2025-10-26,Regulatory Action,Bitcoin,4,0.6093999999999999,4.0
+2025-10-26,Market Crash,Ethereum,3,0.4074333333333333,3.0
+2025-10-26,Market Crash,Monero,2,-0.19975,2.0
+2025-10-26,Market Crash,Zcash,2,-0.19975,2.0
+2025-10-26,Network Outage,Solana,2,-0.43394999999999995,2.0
+2025-10-26,Market Crash,BNB,1,-0.3182,1.0
+2025-10-26,Market Crash,Hyperliquid,1,-0.7232,1.0
+2025-10-26,Market Crash,NEAR Protocol,1,0.0772,1.0
+2025-10-26,Market Crash,Solana,1,0.8402,1.0
+2025-10-26,Market Crash,XRP,1,-0.3182,1.0
+2025-10-26,Network Outage,Chainlink,1,-0.5719,1.0
+2025-10-26,Network Outage,Ethereum,1,0.34,1.0
+2025-10-26,Partnership / Collaboration,Solana,1,0.4404,1.0
+2025-10-26,Regulatory Action,Monero,1,0.4215,1.0
+2025-10-26,Regulatory Action,USDC,1,0.0,1.0
+2025-10-25,Network Outage,Bitcoin,8,0.182975,8.0
+2025-10-25,Market Crash,Bitcoin,5,-0.31904,5.0
+2025-10-25,Regulatory Action,Bitcoin,5,0.4625,5.0
+2025-10-25,Network Outage,Ethereum,2,-0.36655,2.0
+2025-10-25,Exchange Listing,BNB,1,0.8621,1.0
+2025-10-25,Exchange Listing,Bitcoin,1,0.4019,1.0
+2025-10-25,Hack / Exploit,Solana,1,-0.296,1.0
+2025-10-25,Market Crash,Cardano,1,-0.4019,1.0
+2025-10-25,Market Crash,Chainlink,1,-0.4391,1.0
+2025-10-25,Market Crash,Solana,1,-0.4019,1.0
+2025-10-25,Network Outage,Chainlink,1,-0.4391,1.0
+2025-10-25,Regulatory Action,Solana,1,0.8316,1.0
+2025-10-25,Regulatory Action,Tether,1,0.3612,1.0
+2025-10-25,Regulatory Action,USDC,1,0.3612,1.0
+2025-10-24,Network Outage,Bitcoin,11,0.42699090909090914,11.0
+2025-10-24,Market Crash,Bitcoin,4,0.592125,4.0
+2025-10-24,Regulatory Action,Bitcoin,4,0.369325,4.0
+2025-10-24,Hack / Exploit,Bitcoin,3,-0.7624666666666666,3.0
+2025-10-24,Market Crash,BNB,2,-0.0952,2.0
+2025-10-24,Market Crash,World Liberty Financial USD,1,-0.525,1.0
+2025-10-24,Network Outage,NEAR Protocol,1,0.0,1.0
+2025-10-24,Network Outage,Solana,1,0.0,1.0
+2025-10-24,Regulatory Action,Chainlink,1,0.0,1.0
+2025-10-24,Regulatory Action,Solana,1,0.9349,1.0
+2025-10-23,Market Crash,Bitcoin,8,-0.1497625,8.0
+2025-10-23,Network Outage,Bitcoin,8,-0.263125,8.0
+2025-10-23,Regulatory Action,Bitcoin,5,0.17906,5.0
+2025-10-23,Network Outage,Ethereum,4,-0.156225,4.0
+2025-10-23,Network Outage,Kaspa,2,-0.42665000000000003,2.0
+2025-10-23,Regulatory Action,World Liberty Financial,2,0.01755000000000001,2.0
+2025-10-23,Regulatory Action,XRP,2,0.17374999999999996,2.0
+2025-10-23,Exchange Listing,Cronos,1,0.0,1.0
+2025-10-23,Market Crash,Chainlink,1,-0.0397,1.0
+2025-10-23,Network Outage,Ethereum Classic,1,-0.2023,1.0
+2025-10-23,Regulatory Action,Ethereum,1,0.7506,1.0
+2025-10-23,Regulatory Action,Kaspa,1,0.0258,1.0
+2025-10-23,Regulatory Action,Litecoin,1,0.9914,1.0
+2025-10-23,Regulatory Action,Solana,1,0.7609,1.0
+2025-10-23,Regulatory Action,Stellar,1,0.9914,1.0
+2025-10-22,Regulatory Action,Ethereum,5,0.35008,86.0
+2025-10-22,Network Outage,Ethereum,3,0.6038,37.0
+2025-10-22,Market Crash,Bitcoin,7,-0.15075714285714284,7.0
+2025-10-22,Regulatory Action,Bitcoin,4,0.6131,4.0
+2025-10-22,Network Outage,Bitcoin,3,-0.2876666666666667,3.0
+2025-10-22,Market Crash,Ethereum,2,-0.07365,2.0
+2025-10-22,Regulatory Action,Solana,2,0.8610500000000001,2.0
+2025-10-22,Hack / Exploit,Bitcoin,1,0.204,1.0
+2025-10-22,Market Crash,Aave,1,-0.8807,1.0
+2025-10-22,Market Crash,Kaspa,1,0.0516,1.0
+2025-10-22,Market Crash,Solana,1,0.1868,1.0
+2025-10-22,Network Outage,Solana,1,0.9001,1.0
+2025-10-22,Regulatory Action,Chainlink,1,0.7717,1.0
+2025-10-22,Regulatory Action,Internet Computer,1,0.7438,1.0
+2025-10-21,Market Crash,Bitcoin,14,-0.09621428571428571,1146.0
+2025-10-21,Network Outage,Ethereum,5,0.07571999999999998,42.0
+2025-10-21,Network Outage,Bitcoin,7,-0.11268571428571428,7.0
+2025-10-21,Regulatory Action,Bitcoin,2,-0.5815,2.0
+2025-10-21,Market Crash,Ethereum,1,-0.3818,1.0
+2025-10-21,Market Crash,Tether,1,0.6133,1.0
+2025-10-20,Network Outage,Ethereum,2,0.6407,32.0
+2025-10-20,Market Crash,Bitcoin,3,0.16006666666666666,8.0
+2025-10-20,Regulatory Action,Bitcoin,4,-0.034074999999999994,4.0
+2025-10-20,Network Outage,Bitcoin,3,0.4515,3.0
+2025-10-20,Exchange Listing,Bitcoin,1,-0.3182,1.0
+2025-10-20,Network Outage,Internet Computer,1,0.0,1.0
+2025-10-20,Network Outage,Toncoin,1,0.4019,1.0
+2025-10-20,Regulatory Action,Solana,1,0.0,1.0
+2025-10-20,Regulatory Action,XRP,1,-0.6369,1.0
+2025-10-19,Market Crash,Bitcoin,8,-0.0868625,3249.0
+2025-10-19,Regulatory Action,Bitcoin,7,0.1308,1163.0
+2025-10-19,Hack / Exploit,Bitcoin,4,0.293775,268.0
+2025-10-19,Network Outage,Bitcoin,5,0.14856,17.0
+2025-10-19,Network Outage,Ethereum,3,0.5026333333333334,9.0
+2025-10-19,Market Crash,Ethereum,2,0.005099999999999993,2.0
+2025-10-19,Network Outage,Solana,2,-0.14835,2.0
+2025-10-19,Regulatory Action,Solana,2,0.5614,2.0
+2025-10-19,Hack / Exploit,Ethereum,1,-0.0258,1.0
+2025-10-19,Market Crash,Hyperliquid,1,0.4588,1.0
+2025-10-19,Market Crash,Solana,1,0.8979,1.0
+2025-10-19,Market Crash,Tether,1,-0.4019,1.0
+2025-10-19,Network Outage,Ethereum Classic,1,0.7909,1.0
+2025-10-19,Partnership / Collaboration,Ethereum,1,0.1128,1.0
+2025-10-19,Regulatory Action,Ethereum Classic,1,-0.6709,1.0
+2025-10-18,Market Crash,Bitcoin,4,0.06520000000000001,1975.0
+2025-10-18,Network Outage,Bitcoin,5,0.139,1456.0
+2025-10-18,Market Crash,NEAR Protocol,1,-0.4215,6.0
+2025-10-18,Market Crash,Solana,2,0.3392,2.0
+2025-10-18,Network Outage,Ethereum,1,-0.9529,1.0
+2025-10-18,Network Outage,Solana,1,0.0,1.0
+2025-10-18,Partnership / Collaboration,Solana,1,0.2732,1.0
+2025-10-18,Regulatory Action,Bitcoin,1,0.0,1.0
+2025-10-17,Network Outage,Bitcoin,11,0.17617272727272726,396.0
+2025-10-17,Market Crash,Bitcoin,11,-0.04687272727272728,205.0
+2025-10-17,Network Outage,Solana,3,0.11746666666666668,3.0
+2025-10-17,Regulatory Action,Solana,2,0.55515,2.0
+2025-10-17,Market Crash,NEAR Protocol,1,0.3384,1.0
+2025-10-17,Network Outage,Ethereum,1,0.3182,1.0
+2025-10-17,Regulatory Action,Bitcoin,1,0.5719,1.0
+2025-10-16,Market Crash,Bitcoin,5,0.17454,613.0
+2025-10-16,Hack / Exploit,Bitcoin,1,0.6798,43.0
+2025-10-16,Hack / Exploit,Ethereum,1,0.6798,43.0
+2025-10-16,Network Outage,Ethereum,5,0.16734,28.0
+2025-10-16,Exchange Listing,Bitcoin,2,0.43095,27.0
+2025-10-16,Network Outage,Solana,3,0.3732,3.0
+2025-10-16,Regulatory Action,Bitcoin,2,0.2811,2.0
+2025-10-16,Exchange Listing,Solana,1,0.4404,1.0
+2025-10-16,Market Crash,Solana,1,-0.4019,1.0
+2025-10-16,Network Outage,Aster,1,-0.3597,1.0
+2025-10-16,Network Outage,Bitcoin,1,-0.6597,1.0
+2025-10-16,Network Outage,Ethereum Classic,1,-0.4215,1.0
+2025-10-16,Network Outage,Hyperliquid,1,-0.3597,1.0
+2025-10-15,Market Crash,Ethereum,3,0.23549999999999996,36.0
+2025-10-15,Regulatory Action,Bitcoin,1,0.4767,31.0
+2025-10-15,Market Crash,Bitcoin,1,-0.4019,1.0
+2025-10-15,Network Outage,Bitcoin,1,0.4215,1.0
+2025-10-15,Network Outage,Solana,1,0.2844,1.0
+2025-10-15,Regulatory Action,Ethereum,1,-0.5106,1.0
+2025-10-15,Regulatory Action,Solana,1,0.886,1.0
+2025-10-14,Market Crash,XRP,1,-0.3818,290.0
+2025-10-14,Exchange Listing,Bitcoin,1,0.0,203.0
+2025-10-14,Network Outage,Bitcoin,4,0.37445,4.0
+2025-10-14,Network Outage,Solana,4,0.5114000000000001,4.0
+2025-10-14,Market Crash,Ethereum,2,-0.009800000000000003,2.0
+2025-10-14,Market Crash,Solana,2,-0.10115,2.0
+2025-10-14,Market Crash,Toncoin,1,0.4019,1.0
+2025-10-14,Network Outage,Ethereum,1,0.0,1.0
+2025-10-14,Network Outage,Hyperliquid,1,0.4063,1.0
+2025-10-14,Regulatory Action,Bitcoin,1,0.5562,1.0
+2025-10-14,Regulatory Action,Polkadot,1,0.1663,1.0
+2025-10-14,Regulatory Action,Solana,1,0.5562,1.0
+2025-10-13,Network Outage,Bitcoin,5,0.13147999999999999,5.0
+2025-10-13,Market Crash,BNB,1,-0.3204,1.0
+2025-10-13,Market Crash,Bitcoin,1,0.1531,1.0
+2025-10-13,Market Crash,USDC,1,0.34,1.0
+2025-10-13,Network Outage,Ethereum Classic,1,0.3716,1.0
+2025-10-13,Network Outage,Sui,1,-0.3818,1.0
+2025-10-12,Market Crash,Bitcoin,8,-0.27825,8.0
+2025-10-12,Network Outage,Bitcoin,6,0.30483333333333335,6.0
+2025-10-12,Market Crash,Ethereum,4,0.16035,4.0
+2025-10-12,Regulatory Action,Bitcoin,4,0.10835000000000002,4.0
+2025-10-12,Regulatory Action,Ethereum,2,0.2603,2.0
+2025-10-12,Hack / Exploit,Bitcoin,1,0.0,1.0
+2025-10-12,Market Crash,BNB,1,0.9111,1.0
+2025-10-12,Market Crash,Dogecoin,1,0.6554,1.0
+2025-10-12,Network Outage,Ethereum,1,0.3612,1.0
+2025-10-12,Network Outage,Hyperliquid,1,-0.3291,1.0
+2025-10-12,Network Outage,Solana,1,0.3612,1.0
+2025-10-12,Regulatory Action,Hyperliquid,1,0.0,1.0
+2025-10-11,Market Crash,Bitcoin,13,-0.1402923076923077,13.0
+2025-10-11,Network Outage,Bitcoin,10,0.030059999999999996,10.0
+2025-10-11,Regulatory Action,Bitcoin,4,0.3089,4.0
+2025-10-11,Exchange Listing,Ethereum,2,0.4678,2.0
+2025-10-11,Market Crash,Solana,2,0.29515,2.0
+2025-10-11,Network Outage,Ethereum,2,-0.7881,2.0
+2025-10-11,Exchange Listing,Bitcoin,1,0.0,1.0
+2025-10-11,Hack / Exploit,Bitcoin,1,0.0,1.0
+2025-10-11,Hack / Exploit,Ethereum,1,0.0,1.0
+2025-10-11,Market Crash,Bittensor,1,-0.7927,1.0
+2025-10-11,Market Crash,Ethereum,1,0.8988,1.0
+2025-10-11,Market Crash,Hyperliquid,1,-0.7927,1.0
+2025-10-11,Market Crash,XRP,1,0.5405,1.0
+2025-10-11,Network Outage,Bittensor,1,-0.7927,1.0
+2025-10-11,Network Outage,Hyperliquid,1,-0.7927,1.0
+2025-10-11,Network Outage,Litecoin,1,0.0,1.0
+2025-10-11,Network Outage,Solana,1,0.0,1.0
+2025-10-11,Regulatory Action,Ethereum,1,0.8988,1.0
+2025-10-11,Regulatory Action,Solana,1,0.8988,1.0
+2025-10-10,Market Crash,Bitcoin,7,0.06799999999999999,7.0
+2025-10-10,Network Outage,Bitcoin,6,0.11726666666666667,6.0
+2025-10-10,Network Outage,BNB,2,-0.2658,2.0
+2025-10-10,Exchange Listing,Chainlink,1,0.34,1.0
+2025-10-10,Market Crash,BNB,1,0.6705,1.0
+2025-10-10,Market Crash,Hyperliquid,1,0.4215,1.0
+2025-10-10,Network Outage,Cardano,1,-0.4767,1.0
+2025-10-10,Network Outage,Dogecoin,1,0.4215,1.0
+2025-10-10,Network Outage,Litecoin,1,-0.0258,1.0
+2025-10-10,Network Outage,Solana,1,0.3182,1.0
+2025-10-10,Regulatory Action,Bitcoin,1,0.5719,1.0
+2025-10-10,Regulatory Action,Ethereum,1,0.3338,1.0
+2025-10-09,Market Crash,Bitcoin,4,-0.039275000000000004,4.0
+2025-10-09,Network Outage,Bitcoin,3,0.08443333333333336,3.0
+2025-10-09,Regulatory Action,Ethereum,2,0.8299,2.0
+2025-10-09,Regulatory Action,Solana,2,0.8299,2.0
+2025-10-09,Hack / Exploit,Bitcoin,1,-0.3806,1.0
+2025-10-09,Hack / Exploit,Solana,1,0.3248,1.0
+2025-10-09,Hack / Exploit,USDC,1,0.3248,1.0
+2025-10-09,Market Crash,NEAR Protocol,1,-0.1505,1.0
+2025-10-09,Network Outage,Solana,1,-0.121,1.0
+2025-10-09,Regulatory Action,BNB,1,0.7391,1.0
+2025-10-09,Regulatory Action,Cardano,1,0.7391,1.0
+2025-10-09,Regulatory Action,XRP,1,0.7391,1.0
+2025-10-08,Market Crash,Bitcoin,3,0.03383333333333338,3.0
+2025-10-08,Network Outage,Ethereum,3,-0.20473333333333332,3.0
+2025-10-08,Network Outage,Bitcoin,2,0.5119,2.0
+2025-10-08,Regulatory Action,Bitcoin,2,-0.7191,2.0
+2025-10-08,Market Crash,Ethereum,1,-0.3818,1.0
+2025-10-08,Regulatory Action,Ethereum,1,-0.296,1.0
+2025-10-08,Regulatory Action,Solana,1,0.872,1.0
+2025-10-08,Regulatory Action,Tether,1,0.872,1.0
+2025-10-08,Regulatory Action,USDC,1,0.872,1.0
+2025-10-07,Network Outage,Bitcoin,6,0.157,6.0
+2025-10-07,Market Crash,Bitcoin,5,-0.20518,5.0
+2025-10-07,Regulatory Action,Bitcoin,5,0.1937,5.0
+2025-10-07,Regulatory Action,Ethereum,3,0.05083333333333334,3.0
+2025-10-07,Market Crash,Ethereum,2,-0.52615,2.0
+2025-10-07,Market Crash,BNB,1,0.1516,1.0
+2025-10-07,Network Outage,Ethereum,1,-0.3491,1.0
+2025-10-06,Market Crash,Bitcoin,4,-0.25697499999999995,4.0
+2025-10-06,Regulatory Action,Ethereum,2,0.42,2.0
+2025-10-06,Network Outage,Bitcoin,1,0.6369,1.0
+2025-10-06,Regulatory Action,Bitcoin,1,-0.1268,1.0
+2025-10-06,Regulatory Action,Solana,1,0.0129,1.0
+2025-10-05,Market Crash,Bitcoin,2,-0.60975,2.0
+2025-10-05,Network Outage,Bitcoin,2,-0.73495,2.0
+2025-10-05,Network Outage,Ethereum,2,-0.2997,2.0
+2025-10-05,Hack / Exploit,Bitcoin,1,-0.6124,1.0
+2025-10-05,Network Outage,NEAR Protocol,1,0.0772,1.0
+2025-10-05,Network Outage,Solana,1,-0.4019,1.0
+2025-10-05,Partnership / Collaboration,Chainlink,1,0.0,1.0
+2025-10-05,Regulatory Action,Bitcoin,1,-0.7717,1.0
+2025-10-04,Network Outage,Bitcoin,2,-0.07395000000000002,2.0
+2025-10-04,Market Crash,Bitcoin,1,-0.1363,1.0
+2025-10-04,Network Outage,Ondo,1,0.3182,1.0
+2025-10-03,Network Outage,Bitcoin,5,0.13506,5.0
+2025-10-03,Market Crash,Bitcoin,2,-0.178,2.0
+2025-10-03,Market Crash,BNB,1,0.0258,1.0
+2025-10-03,Market Crash,USDC,1,0.8945,1.0
+2025-10-03,Network Outage,Ethereum,1,0.1406,1.0
+2025-10-03,Network Outage,Litecoin,1,0.6774,1.0
+2025-10-02,Network Outage,Bitcoin,10,0.19036,10.0
+2025-10-02,Network Outage,Solana,3,0.13396666666666665,3.0
+2025-10-02,Market Crash,Bitcoin,2,0.1909,2.0
+2025-10-02,Regulatory Action,Ethereum,2,0.35865,2.0
+2025-10-02,Exchange Listing,Solana,1,0.5106,1.0
+2025-10-02,Hack / Exploit,Bitcoin,1,0.224,1.0
+2025-10-02,Market Crash,Ethereum,1,-0.7003,1.0
+2025-10-02,Network Outage,Ethereum,1,0.5574,1.0
+2025-10-02,Network Outage,Tether,1,0.5574,1.0
+2025-10-02,Regulatory Action,Zcash,1,0.7173,1.0
+2025-10-01,Network Outage,Solana,8,-0.1290875,8.0
+2025-10-01,Network Outage,Bitcoin,7,0.27540000000000003,7.0
+2025-10-01,Network Outage,Ethereum,5,0.3257,5.0
+2025-10-01,Market Crash,Bitcoin,3,0.1686,3.0
+2025-10-01,Exchange Listing,Solana,2,0.42775,2.0
+2025-10-01,Regulatory Action,Bitcoin,2,0.13565,2.0
+2025-10-01,Exchange Listing,Bitcoin,1,0.0,1.0
+2025-10-01,Exchange Listing,USDC,1,0.0,1.0
+2025-10-01,Hack / Exploit,Bitcoin,1,-0.4939,1.0
+2025-10-01,Network Outage,Toncoin,1,-0.1027,1.0
+2025-10-01,Regulatory Action,Ethereum,1,0.6038,1.0
+2025-10-01,Regulatory Action,Ethereum Classic,1,0.8779,1.0
+2025-10-01,Regulatory Action,Hyperliquid,1,0.8779,1.0
+2025-10-01,Regulatory Action,Internet Computer,1,0.8779,1.0
+2025-10-01,Regulatory Action,Solana,1,0.8779,1.0
+2025-09-30,Network Outage,Solana,1,0.5994,1.0
+2025-09-30,Regulatory Action,Bitcoin,1,0.7584,1.0
+2025-09-30,Regulatory Action,Solana,1,0.0772,1.0

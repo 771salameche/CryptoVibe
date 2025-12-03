@@ -1,170 +1,130 @@
-import React, { useState, useEffect } from 'react';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css'; // Import styles
-import { FilterState, CryptoEvent } from '../../types/events';
-import { Search, XCircle } from 'lucide-react'; // Icons
+import React from 'react';
+import { EventType } from '../types/events';
+
+const eventTypes: EventType[] = ['LISTING', 'HACK', 'REGULATION', 'PARTNERSHIP', 'UPGRADE'];
+const cryptos = ['BTC', 'ETH', 'SOL'];
 
 interface FiltersPanelProps {
-  filterState: FilterState;
-  onFilterChange: (newFilters: Partial<FilterState>) => void;
-  onResetFilters: () => void;
-  allEvents: CryptoEvent[]; // To derive available filter options
+    searchTerm: string;
+    setSearchTerm: (searchTerm: string) => void;
+    selectedEventTypes: string[];
+    setSelectedEventTypes: (eventTypes: string[]) => void;
+    selectedCryptos: string[];
+    setSelectedCryptos: (cryptos: string[]) => void;
+    setDateRange: (dateRange: [Date | null, Date | null]) => void;
 }
 
 const FiltersPanel: React.FC<FiltersPanelProps> = ({
-  filterState,
-  onFilterChange,
-  onResetFilters,
-  allEvents,
+    searchTerm,
+    setSearchTerm,
+    selectedEventTypes,
+    setSelectedEventTypes,
+    selectedCryptos,
+    setSelectedCryptos,
+    setDateRange
 }) => {
-  const [availableEventTypes, setAvailableEventTypes] = useState<string[]>([]);
-  const [availableCryptos, setAvailableCryptos] = useState<string[]>([]);
+    
+    const handleEventTypeChange = (eventType: string) => {
+        const newSelection = selectedEventTypes.includes(eventType)
+            ? selectedEventTypes.filter(t => t !== eventType)
+            : [...selectedEventTypes, eventType];
+        setSelectedEventTypes(newSelection);
+    };
 
-  useEffect(() => {
-    // Extract unique event types and cryptos from allEvents
-    const types = Array.from(new Set(allEvents.map(event => event.eventType)));
-    setAvailableEventTypes(types);
+    const handleCryptoChange = (crypto: string) => {
+        const newSelection = selectedCryptos.includes(crypto)
+            ? selectedCryptos.filter(c => c !== crypto)
+            : [...selectedCryptos, crypto];
+        setSelectedCryptos(newSelection);
+    };
 
-    const cryptos = Array.from(new Set(allEvents.flatMap(event => event.crypto)));
-    setAvailableCryptos(cryptos);
-  }, [allEvents]);
-
-  const handleEventTypeChange = (type: string) => {
-    onFilterChange({
-      eventTypes: filterState.eventTypes.includes(type)
-        ? filterState.eventTypes.filter(t => t !== type)
-        : [...filterState.eventTypes, type],
-    });
-  };
-
-  const handleCryptoChange = (crypto: string) => {
-    onFilterChange({
-      cryptos: filterState.cryptos.includes(crypto)
-        ? filterState.cryptos.filter(c => c !== crypto)
-        : [...filterState.cryptos, crypto],
-    });
-  };
-
-  const getEventTypeColor = (eventType: string) => {
-    switch (eventType) {
-      case 'LISTING': return 'bg-green-600';
-      case 'HACK': return 'bg-red-600';
-      case 'REGULATION': return 'bg-yellow-600';
-      case 'PARTNERSHIP': return 'bg-blue-600';
-      case 'UPGRADE': return 'bg-purple-600';
-      default: return 'bg-gray-600';
+    const handleReset = () => {
+        setSearchTerm('');
+        setSelectedEventTypes([]);
+        setSelectedCryptos([]);
+        setDateRange([null, null]);
     }
-  };
 
   return (
-    <div className="bg-gray-800 bg-opacity-30 p-6 rounded-xl backdrop-filter backdrop-blur-lg border border-gray-700 shadow-lg mb-8">
-      <h3 className="text-xl font-semibold text-white mb-4">Filter Events</h3>
+    <div className="bg-gray-800 p-4 rounded-lg mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
+            {/* Search Input */}
+            <div className="col-span-1 lg:col-span-1">
+                <label htmlFor="search" className="block text-sm font-medium text-gray-400 mb-1">Search Events</label>
+                <input
+                    type="text"
+                    id="search"
+                    placeholder="Search events..."
+                    className="w-full bg-gray-700 border border-gray-600 rounded-md shadow-sm py-2 px-3 text-white focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                />
+            </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {/* Event Type Filter */}
-        <div>
-          <label className="block text-gray-300 text-sm font-bold mb-2">Event Type</label>
-          <div className="flex flex-wrap gap-2">
-            {availableEventTypes.map(type => (
-              <button
-                key={type}
-                className={`${getEventTypeColor(type)} text-white text-xs px-3 py-1 rounded-full transition-all duration-200
-                  ${filterState.eventTypes.includes(type) ? 'opacity-100 ring-2 ring-offset-2 ring-offset-gray-800' : 'opacity-70 hover:opacity-100'}`}
-                onClick={() => handleEventTypeChange(type)}
-              >
-                {type}
-              </button>
-            ))}
-          </div>
-        </div>
+            {/* Event Type Filter */}
+            <div className="col-span-1 lg:col-span-2">
+                <label className="block text-sm font-medium text-gray-400 mb-1">Event Type</label>
+                <div className="flex items-center space-x-2 mt-2 flex-wrap">
+                    {eventTypes.map(type => (
+                        <button 
+                            key={type}
+                            onClick={() => handleEventTypeChange(type)}
+                            className={`px-3 py-1 text-sm font-medium rounded-full ${selectedEventTypes.includes(type) ? 'bg-indigo-600 text-white' : 'bg-gray-700 text-gray-300'}`}
+                        >
+                            {type}
+                        </button>
+                    ))}
+                </div>
+            </div>
 
-        {/* Crypto Filter */}
-        <div>
-          <label className="block text-gray-300 text-sm font-bold mb-2">Cryptocurrency</label>
-          <div className="flex flex-wrap gap-2">
-            {availableCryptos.map(crypto => (
-              <button
-                key={crypto}
-                className={`px-3 py-1 text-xs rounded-full transition-all duration-200
-                  ${filterState.cryptos.includes(crypto) ? 'bg-blue-500 text-white ring-2 ring-offset-2 ring-offset-gray-800' : 'bg-gray-700 text-gray-300 hover:bg-blue-500'}`}
-                onClick={() => handleCryptoChange(crypto)}
-              >
-                {crypto}
-              </button>
-            ))}
-          </div>
-        </div>
+            {/* Crypto Filter */}
+            <div className="col-span-1 lg:col-span-1">
+                <label className="block text-sm font-medium text-gray-400 mb-1">Cryptocurrency</label>
+                <div className="flex items-center space-x-4 mt-2">
+                    {cryptos.map(crypto => (
+                        <label key={crypto} className="flex items-center text-white">
+                            <input 
+                                type="checkbox" 
+                                className="h-4 w-4 bg-gray-700 border-gray-600 rounded text-indigo-600 focus:ring-indigo-500"
+                                checked={selectedCryptos.includes(crypto)}
+                                onChange={() => handleCryptoChange(crypto)}
+                            />
+                            <span className="ml-2">{crypto}</span>
+                        </label>
+                    ))}
+                </div>
+            </div>
 
-        {/* Date Range Picker */}
-        <div>
-          <label className="block text-gray-300 text-sm font-bold mb-2">Date Range</label>
-          <div className="flex gap-2">
-            <DatePicker
-              selected={filterState.startDate}
-              onChange={(date: Date) => onFilterChange({ startDate: date })}
-              selectsStart
-              startDate={filterState.startDate}
-              endDate={filterState.endDate}
-              placeholderText="Start Date"
-              className="p-2 rounded bg-gray-700 text-white w-full text-sm"
-              wrapperClassName="w-1/2"
-            />
-            <DatePicker
-              selected={filterState.endDate}
-              onChange={(date: Date) => onFilterChange({ endDate: date })}
-              selectsEnd
-              startDate={filterState.startDate}
-              endDate={filterState.endDate}
-              minDate={filterState.startDate}
-              placeholderText="End Date"
-              className="p-2 rounded bg-gray-700 text-white w-full text-sm"
-              wrapperClassName="w-1/2"
-            />
-          </div>
-        </div>
+            {/* Date Range Filter */}
+            <div className="col-span-1 lg:col-span-1">
+                <label htmlFor="start-date" className="block text-sm font-medium text-gray-400 mb-1">Start Date</label>
+                <input 
+                    type="date" 
+                    id="start-date" 
+                    className="w-full bg-gray-700 border border-gray-600 rounded-md shadow-sm py-2 px-3 text-white focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    onChange={(e) => setDateRange([e.target.valueAsDate, null])} // Simple implementation for now
+                />
+            </div>
+            <div className="col-span-1 lg:col-span-1">
+                <label htmlFor="end-date" className="block text-sm font-medium text-gray-400 mb-1">End Date</label>
+                <input 
+                    type="date" 
+                    id="end-date" 
+                    className="w-full bg-gray-700 border border-gray-600 rounded-md shadow-sm py-2 px-3 text-white focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    onChange={(e) => setDateRange([null, e.target.valueAsDate])} // Simple implementation for now
+                />
+            </div>
 
-        {/* Sentiment Filter */}
-        <div>
-          <label className="block text-gray-300 text-sm font-bold mb-2">Sentiment</label>
-          <div className="flex gap-2">
-            {['all', 'positive', 'neutral', 'negative'].map(sentiment => (
-              <button
-                key={sentiment}
-                className={`px-3 py-1 text-xs rounded-full transition-all duration-200 capitalize
-                  ${filterState.sentiment === sentiment ? 'bg-indigo-500 text-white ring-2 ring-offset-2 ring-offset-gray-800' : 'bg-gray-700 text-gray-300 hover:bg-indigo-500'}`}
-                onClick={() => onFilterChange({ sentiment: sentiment as 'all' | 'positive' | 'negative' | 'neutral' })}
-              >
-                {sentiment}
-              </button>
-            ))}
-          </div>
+            {/* Reset Button */}
+            <div className="col-span-1 lg:col-span-1 flex items-end">
+                <button 
+                    onClick={handleReset}
+                    className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                >
+                    Reset
+                </button>
+            </div>
         </div>
-
-        {/* Search Input */}
-        <div className="lg:col-span-1">
-          <label className="block text-gray-300 text-sm font-bold mb-2">Search</label>
-          <div className="relative">
-            <input
-              type="text"
-              placeholder="Search events..."
-              className="p-2 pl-10 rounded bg-gray-700 text-white w-full text-sm"
-              value={filterState.searchTerm}
-              onChange={(e) => onFilterChange({ searchTerm: e.target.value })}
-            />
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
-          </div>
-        </div>
-
-        {/* Reset Filters Button */}
-        <div className="flex items-end justify-end">
-          <button
-            onClick={onResetFilters}
-            className="flex items-center gap-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-all duration-200 text-sm"
-          >
-            <XCircle size={16} /> Reset Filters
-          </button>
-        </div>
-      </div>
     </div>
   );
 };

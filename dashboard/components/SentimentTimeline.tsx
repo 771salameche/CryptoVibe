@@ -263,7 +263,7 @@ const SentimentTimeline: React.FC<SentimentTimelineProps> = ({ data = MOCK_DATA,
 
       {/* Chart */}
       <div className="h-[500px] w-full bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm" ref={chartRef}>
-        <ResponsiveContainer width="100%" height="100%">
+        <ResponsiveContainer width="99%" height="99%">
             <AreaChart data={processedData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
                  <defs>
                     {selectedCryptos.map(crypto => (

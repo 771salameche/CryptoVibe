@@ -1,9 +1,10 @@
 myenv/
 .env
-__pycache__/        
+__pycache__/
 reddit_scraper.log
 kaggle/
 mbsa.csv/
 .cache
 node_modules/
 .vscode/
+dashboard/dist/

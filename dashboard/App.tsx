@@ -2,7 +2,7 @@
 import React from 'react';
 import SentimentTimeline from './components/SentimentTimeline';
 // import CryptoComparison from './components/CryptoComparison';
-// import EventsSection from './components/EventsSection'; // New import
+import EventsSection from './components/EventsSection'; // New import
 
 function App() {
   return (
@@ -10,7 +10,7 @@ function App() {
       <SentimentTimeline isLoading={false} />
       {/* Hello World! The app is rendering. */}
       {/* <CryptoComparison /> */}
-      {/* <EventsSection /> */}
+      <EventsSection />
     </div>
   );
 }

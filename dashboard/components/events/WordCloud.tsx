@@ -1,6 +1,7 @@
 import React from 'react';
-import ReactWordcloud from 'wordcloud-react-18';
 import { WordData } from '../../types/events';
+import { scaleLog } from '@visx/scale';
+import { Wordcloud } from '@visx/wordcloud';
 
 interface WordCloudProps {
   words: WordData[];
@@ -20,28 +21,44 @@ const WordCloud: React.FC<WordCloudProps> = ({ words, title, sentimentType = 'ov
     return 'rgb(107, 114, 128)'; // Default gray
   };
 
-  const options = {
-    rotations: 0,
-    rotationAngles: [0, 0],
-    fontFamily: 'Impact',
-    enableTooltip: true,
-    deterministic: true,
-    colors: (word: WordData) => getWordColor(word),
-  };
+  const fontScale = scaleLog({
+    domain: [Math.min(...words.map((w) => w.value)), Math.max(...words.map((w) => w.value))],
+    range: [10, 100],
+  });
 
-  // Format words for react-wordcloud (requires text and value)
-  const formattedWords = words.map(word => ({
-    text: word.text,
-    value: word.value,
-    sentiment: word.sentiment, // Pass sentiment for custom coloring
-  }));
+  const fontSizeSetter = (datum: WordData) => fontScale(datum.value);
 
   return (
     <div className="bg-gray-800 bg-opacity-30 p-4 rounded-xl backdrop-filter backdrop-blur-lg border border-gray-700 shadow-lg h-96 flex flex-col">
       <h4 className="text-xl font-semibold text-white mb-2 text-center">{title}</h4>
-      {formattedWords.length > 0 ? (
-        <div className="flex-grow">
-          <ReactWordcloud words={formattedWords} options={options} />
+      {words.length > 0 ? (
+        <div className="flex-grow flex items-center justify-center">
+          <Wordcloud
+            words={words}
+            width={400} // Adjust width as needed
+            height={300} // Adjust height as needed
+            fontSize={fontSizeSetter}
+            font="Impact"
+            padding={5}
+            spiral="archimedean"
+            rotate={() => 0} // No rotation for simplicity
+            fill={getWordColor}
+          >
+            {(cloudWords) =>
+              cloudWords.map((w, i) => (
+                <text
+                  key={w.text}
+                  fill={w.fill}
+                  textAnchor="middle"
+                  transform={`translate(${w.x}, ${w.y}) rotate(${w.rotate})`}
+                  fontSize={w.size}
+                  fontFamily={w.font}
+                >
+                  {w.text}
+                </text>
+              ))
+            }
+          </Wordcloud>
         </div>
       ) : (
         <div className="flex-grow flex items-center justify-center text-gray-500 text-lg">

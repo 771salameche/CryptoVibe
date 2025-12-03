@@ -1,37 +1,50 @@
 import React from 'react';
-import { EventStatistics } from '../../types/events';
+import { EventCsvRow } from '../../utils/eventsDataProcessor'; // Import EventCsvRow
 
 interface StatsCardsProps {
-  stats: EventStatistics;
+    events: EventCsvRow[];
 }
 
-const StatsCards: React.FC<StatsCardsProps> = ({ stats }) => {
+const StatsCards: React.FC<StatsCardsProps> = ({ events }) => {
+  const totalEvents = events.length;
+
+  const mostActiveCrypto = events.reduce((acc, event) => {
+    acc[event.crypto] = (acc[event.crypto] || 0) + 1;
+    return acc;
+  }, {} as Record<string, number>);
+
+  const mostActiveCryptoName = Object.keys(mostActiveCrypto).reduce((a, b) => mostActiveCrypto[a] > mostActiveCrypto[b] ? a : b, '');
+
+  const mostCommonEventType = events.reduce((acc, event) => {
+    acc[event.event_type] = (acc[event.event_type] || 0) + 1;
+    return acc;
+  }, {} as Record<string, number>);
+
+  const mostCommonEventTypeName = Object.keys(mostCommonEventType).reduce((a, b) => mostCommonEventType[a] > mostCommonEventType[b] ? a : b, '');
+
+  if (events.length === 0) {
+    return (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div className="bg-gray-800 p-4 rounded-lg animate-pulse h-24"></div>
+            <div className="bg-gray-800 p-4 rounded-lg animate-pulse h-24"></div>
+            <div className="bg-gray-800 p-4 rounded-lg animate-pulse h-24"></div>
+        </div>
+    );
+  }
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-      {/* Total Events Detected */}
-      <div className="bg-gray-800 bg-opacity-30 p-6 rounded-xl backdrop-filter backdrop-blur-lg border border-gray-700 shadow-lg text-center">
-        <p className="text-sm text-gray-400 mb-1">Total Events Detected</p>
-        <p className="text-3xl font-bold text-white">{stats.totalEvents} events</p>
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+      <div className="bg-gray-800 p-4 rounded-lg">
+        <h3 className="text-sm font-medium text-gray-400">Total Events</h3>
+        <p className="text-2xl font-bold">{totalEvents}</p>
       </div>
-
-      {/* Most Active Crypto */}
-      <div className="bg-gray-800 bg-opacity-30 p-6 rounded-xl backdrop-filter backdrop-blur-lg border border-gray-700 shadow-lg text-center">
-        <p className="text-sm text-gray-400 mb-1">Most Active Crypto</p>
-        {stats.mostActiveCrypto ? (
-          <p className="text-3xl font-bold text-white">{stats.mostActiveCrypto.crypto} ({stats.mostActiveCrypto.count} events)</p>
-        ) : (
-          <p className="text-xl text-gray-500">N/A</p>
-        )}
+      <div className="bg-gray-800 p-4 rounded-lg">
+        <h3 className="text-sm font-medium text-gray-400">Most Active Crypto</h3>
+        <p className="text-2xl font-bold">{mostActiveCryptoName} ({mostActiveCrypto[mostActiveCryptoName] || 0})</p>
       </div>
-
-      {/* Most Common Event Type */}
-      <div className="bg-gray-800 bg-opacity-30 p-6 rounded-xl backdrop-filter backdrop-blur-lg border border-gray-700 shadow-lg text-center">
-        <p className="text-sm text-gray-400 mb-1">Most Common Event Type</p>
-        {stats.mostCommonEventType ? (
-          <p className="text-3xl font-bold text-white">{stats.mostCommonEventType.type} ({stats.mostCommonEventType.count})</p>
-        ) : (
-          <p className="text-xl text-gray-500">N/A</p>
-        )}
+      <div className="bg-gray-800 p-4 rounded-lg">
+        <h3 className="text-sm font-medium text-gray-400">Most Common Event</h3>
+        <p className="text-2xl font-bold">{mostCommonEventTypeName} ({mostCommonEventType[mostCommonEventTypeName] || 0})</p>
       </div>
     </div>
   );

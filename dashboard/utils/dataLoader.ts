@@ -69,3 +69,39 @@ export async function loadEnrichedData(): Promise<any[]> {
       return [];
     }
   }
+
+  export async function loadCorrelationData(): Promise<any> {
+    try {
+        const [sentimentPriceResponse, correlationResultsResponse] = await Promise.all([
+            fetch('/data/merged_sentiment_price.csv'),
+            fetch('/data/correlation_results.csv'),
+        ]);
+
+        if (!sentimentPriceResponse.ok) {
+            throw new Error(`HTTP error! status: ${sentimentPriceResponse.status}`);
+        }
+        if (!correlationResultsResponse.ok) {
+            throw new Error(`HTTP error! status: ${correlationResultsResponse.status}`);
+        }
+
+        const sentimentPriceCsv = await sentimentPriceResponse.text();
+        const correlationResultsCsv = await correlationResultsResponse.text();
+
+        const sentimentPriceData = parseCSV(sentimentPriceCsv);
+        const correlationResultsData = parseCSV(correlationResultsCsv);
+
+        return {
+            sentimentPrice: {
+                header: sentimentPriceData[0],
+                data: sentimentPriceData.slice(1),
+            },
+            correlationResults: {
+                header: correlationResultsData[0],
+                data: correlationResultsData.slice(1),
+            },
+        };
+    } catch (error) {
+        console.error("Failed to load correlation data:", error);
+        return { sentimentPrice: { header: [], data: [] }, correlationResults: { header: [], data: [] } };
+    }
+}

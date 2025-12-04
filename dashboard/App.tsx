@@ -1,17 +1,28 @@
-
 import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Header from './components/Header';
 import SentimentTimeline from './components/SentimentTimeline';
-// import CryptoComparison from './components/CryptoComparison';
-import EventsSection from './components/EventsSection'; // New import
+import EventsSection from './components/EventsSection';
+import PriceCorrelation from './components/PriceCorrelation';
 
 function App() {
   return (
-    <div className="bg-gray-900 min-h-screen text-white text-2xl p-8">
-      <SentimentTimeline isLoading={false} />
-      {/* Hello World! The app is rendering. */}
-      {/* <CryptoComparison /> */}
-      <EventsSection />
-    </div>
+    <Router>
+      <div className="bg-gray-900 min-h-screen text-white">
+        <Header />
+        <div className="p-8">
+          <Routes>
+            <Route path="/" element={
+              <>
+                <SentimentTimeline isLoading={false} />
+                <EventsSection />
+              </>
+            } />
+            <Route path="/correlation" element={<PriceCorrelation />} />
+          </Routes>
+        </div>
+      </div>
+    </Router>
   );
 }
 

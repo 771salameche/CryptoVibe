@@ -2,3 +2,18 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* nprogress styles */
+#nprogress .bar {
+  background: #007bff !important;
+  height: 3px !important;
+}
+
+#nprogress .peg {
+  box-shadow: 0 0 10px #007bff, 0 0 5px #007bff !important;
+}
+
+#nprogress .spinner-icon {
+  border-top-color: #007bff !important;
+  border-left-color: #007bff !important;
+}

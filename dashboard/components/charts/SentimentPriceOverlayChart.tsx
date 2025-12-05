@@ -9,7 +9,6 @@ import {
   Legend,
   ResponsiveContainer,
   ReferenceArea,
-  Area,
 } from 'recharts';
 import { format } from 'date-fns';
 
@@ -66,6 +65,11 @@ const SentimentPriceOverlayChart: React.FC<SentimentPriceOverlayChartProps> = ({
     return numerator / denominator;
   }, [data]);
 
+  const priceColor = useMemo(() => {
+    if (data.length === 0) return '#34D399';
+    const lastEntry = data[data.length - 1];
+    return lastEntry.priceChange >= 0 ? '#34D399' : '#EF4444';
+  }, [data]);
 
   return (
     <div className="relative">
@@ -87,8 +91,8 @@ const SentimentPriceOverlayChart: React.FC<SentimentPriceOverlayChartProps> = ({
           <YAxis
             yAxisId="right"
             orientation="right"
-            label={{ value: 'Price (USD)', angle: 90, position: 'insideRight', fill: '#34D399' }}
-            stroke="#34D399"
+            label={{ value: 'Price (USD)', angle: 90, position: 'insideRight', fill: priceColor }}
+            stroke={priceColor}
           />
           <Tooltip content={<CustomTooltip />} />
           <Legend wrapperStyle={{ color: '#F9FAFB', paddingTop: '10px' }} />
@@ -151,7 +155,7 @@ const SentimentPriceOverlayChart: React.FC<SentimentPriceOverlayChartProps> = ({
             yAxisId="right"
             type="monotone"
             dataKey="price"
-            stroke={(entry) => (entry.priceChange >= 0 ? '#34D399' : '#EF4444')} // Green-500 or Red-500
+            stroke={priceColor}
             strokeWidth={2}
             dot={false}
           />

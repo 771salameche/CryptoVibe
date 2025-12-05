@@ -10,6 +10,7 @@ import {
   ResponsiveContainer,
   ReferenceLine,
   Label,
+  Line,
 } from 'recharts';
 
 interface ScatterPlotProps {

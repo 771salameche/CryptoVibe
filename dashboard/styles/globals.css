@@ -3,17 +3,59 @@
 @tailwind components;
 @tailwind utilities;
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg-app: linear-gradient(to bottom, #f0f4f8, #d9e2ec);
+    --bg-surface: rgba(255, 255, 255, 0.5);
+    --bg-surface-muted: rgba(255, 255, 255, 0.2);
+    --fg-text: #1a202c;
+    --fg-text-muted: #718096;
+    --accent-primary: #3b82f6;
+    --accent-secondary: #8b5cf6;
+    --status-positive: #10b981;
+    --status-negative: #ef4444;
+    --status-neutral: #6b7280;
+    --border-default: rgba(255, 255, 255, 0.2);
+    --shadow-card: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .dark {
+    --bg-app: linear-gradient(to bottom, #1a202c, #131821);
+    --bg-surface: rgba(30, 41, 59, 0.5);
+    --bg-surface-muted: rgba(30, 41, 59, 0.2);
+    --fg-text: #f7fafc;
+    --fg-text-muted: #a0aec0;
+    --accent-primary: #3b82f6;
+    --accent-secondary: #8b5cf6;
+    --status-positive: #34d399;
+    --status-negative: #f87171;
+    --status-neutral: #9ca3af;
+    --border-default: rgba(255, 255, 255, 0.1);
+    --shadow-card: 0 4px 6px rgba(0, 0, 0, 0.2);
+  }
+
+  body {
+    background: var(--bg-app);
+    color: var(--fg-text);
+    font-family: 'Inter', sans-serif;
+  }
+}
+
 /* nprogress styles */
 #nprogress .bar {
-  background: #007bff !important;
+  background: var(--accent-primary) !important;
   height: 3px !important;
 }
 
 #nprogress .peg {
-  box-shadow: 0 0 10px #007bff, 0 0 5px #007bff !important;
+  box-shadow: 0 0 10px var(--accent-primary), 0 0 5px var(--accent-primary) !important;
 }
 
 #nprogress .spinner-icon {
-  border-top-color: #007bff !important;
-  border-left-color: #007bff !important;
+  border-top-color: var(--accent-primary) !important;
+  border-left-color: var(--accent-primary) !important;
 }

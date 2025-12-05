@@ -19,6 +19,7 @@
     "d3-ease": "^3.0.1",
     "date-fns": "^4.1.0",
     "html-to-image": "^1.11.13",
+    "lucide-react": "^0.556.0",
     "nprogress": "^0.2.0",
     "papaparse": "^5.5.3",
     "prop-types": "^15.8.1",

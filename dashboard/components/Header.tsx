@@ -1,16 +1,45 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import ThemeSwitcher from './ThemeSwitcher';
+import Layout from './Layout';
+import { LayoutGrid, Link as LinkIcon, Bitcoin } from 'lucide-react';
 
 const Header: React.FC = () => {
   return (
-    <header className="bg-gray-800 text-white p-4 flex justify-between items-center">
-      <Link to="/" className="text-2xl font-bold">CryptoVibe</Link>
-      <nav className="flex items-center space-x-4">
-        <Link to="/" className="px-4">Sentiment Timeline</Link>
-        <Link to="/correlation" className="px-4">Price Correlation</Link>
-        <ThemeSwitcher />
-      </nav>
+    <header className="sticky top-0 z-50 py-4 bg-bg-surface/80 backdrop-blur-lg border-b border-border-default">
+      <Layout>
+        <div className="flex justify-between items-center">
+          <NavLink to="/" className="flex items-center space-x-2 text-2xl font-bold text-accent-primary">
+            <Bitcoin />
+            <span>CryptoVibe</span>
+          </NavLink>
+          <nav className="flex items-center space-x-6">
+            <NavLink
+              to="/"
+              className={({ isActive }) =>
+                `flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                  isActive ? 'text-accent-primary' : 'text-fg-text-muted hover:text-fg-text'
+                }`
+              }
+            >
+              <LayoutGrid size={18} />
+              <span>Dashboard</span>
+            </NavLink>
+            <NavLink
+              to="/correlation"
+              className={({ isActive }) =>
+                `flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                  isActive ? 'text-accent-primary' : 'text-fg-text-muted hover:text-fg-text'
+                }`
+              }
+            >
+              <LinkIcon size={18} />
+              <span>Correlation</span>
+            </NavLink>
+            <ThemeSwitcher />
+          </nav>
+        </div>
+      </Layout>
     </header>
   );
 };

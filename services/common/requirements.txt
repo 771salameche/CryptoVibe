@@ -1,0 +1,8 @@
+# Common dependencies for Python microservices
+fastapi
+uvicorn
+pika
+pandas
+python-dotenv
+structlog
+praw

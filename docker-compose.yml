@@ -1,0 +1,102 @@
+version: '3.8'
+
+services:
+  rabbitmq:
+    image: "rabbitmq:3.9-management-alpine"
+    container_name: 'rabbitmq'
+    ports:
+      - "5672:5672"  # AMQP protocol port
+      - "15672:15672" # Management UI port
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq/
+    networks:
+      - crypto_network
+
+  ingestion_service:
+    build:
+      context: .
+      dockerfile: services/ingestion_service/Dockerfile
+    container_name: ingestion_service
+    depends_on:
+      - rabbitmq
+    volumes:
+      - ./services/ingestion_service:/app
+    networks:
+      - crypto_network
+    environment:
+      - RABBITMQ_HOST=rabbitmq
+    env_file:
+      - ./.env
+
+  processing_service:
+    build:
+      context: .
+      dockerfile: services/processing_service/Dockerfile
+    container_name: processing_service
+    depends_on:
+      - rabbitmq
+    volumes:
+      - ./services/processing_service:/app
+    networks:
+      - crypto_network
+    environment:
+      - RABBITMQ_HOST=rabbitmq
+    env_file:
+      - ./.env
+
+  api_gateway:
+    build:
+      context: .
+      dockerfile: services/api_gateway/Dockerfile
+    container_name: api_gateway
+    ports:
+      - "8000:8000"
+    depends_on:
+      - rabbitmq
+    volumes:
+      - ./services/api_gateway:/app
+    networks:
+      - crypto_network
+    environment:
+      - RABBITMQ_HOST=rabbitmq
+    env_file:
+      - ./.env
+
+  websocket_service:
+    build:
+      context: .
+      dockerfile: services/websocket_service/Dockerfile
+    container_name: websocket_service
+    ports:
+      - "8001:8001"
+    depends_on:
+      - rabbitmq
+    volumes:
+      - ./services/websocket_service:/app
+    networks:
+      - crypto_network
+    environment:
+      - RABBITMQ_HOST=rabbitmq
+    env_file:
+      - ./.env
+
+  dashboard:
+    build:
+      context: ./dashboard
+      dockerfile: Dockerfile
+    container_name: dashboard
+    ports:
+      - "5173:5173"
+    depends_on:
+      - api_gateway
+      - websocket_service
+    networks:
+      - crypto_network
+
+networks:
+  crypto_network:
+    driver: bridge
+
+volumes:
+  rabbitmq_data:
+    driver: local

@@ -2,7 +2,7 @@ import React, { lazy, Suspense, useState, useEffect, useCallback } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
 import LoadingIndicator from './components/LoadingIndicator';
-import { Toaster } from 'react-hot-toast';
+import toast, { Toaster } from 'react-hot-toast'; // Import toast
 import Dashboard from './components/Dashboard';
 import Layout from './components/Layout';
 import { useWebSocket, ProcessedMessage } from './src/hooks/useWebSocket'; // Assuming src/hooks is correct path
@@ -29,9 +29,15 @@ function App() {
   useEffect(() => {
     if (isConnected) {
       console.log('WebSocket is live!');
+      toast.success('WebSocket Connected!', { id: 'websocket-status' });
+    } else if (!isConnected && !error) {
+      // Only show disconnected if it was previously connected or trying to connect
+      console.log('WebSocket Disconnected.');
+      toast.error('WebSocket Disconnected.', { id: 'websocket-status' });
     }
     if (error) {
       console.error('WebSocket encountered an error:', error);
+      toast.error('WebSocket Error: ' + error.message, { id: 'websocket-status' });
     }
   }, [isConnected, error]);
 

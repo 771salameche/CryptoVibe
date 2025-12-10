@@ -2,9 +2,13 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import ThemeSwitcher from './ThemeSwitcher';
 import Layout from './Layout';
-import { LayoutGrid, Link as LinkIcon, Bitcoin } from 'lucide-react';
+import { LayoutGrid, Link as LinkIcon, Bitcoin } from 'lucide-react'; // Removed HelpCircle icon
 
-const Header: React.FC = () => {
+interface HeaderProps {
+  // Removed startTour prop
+}
+
+const Header: React.FC<HeaderProps> = () => {
   return (
     <header className="sticky top-0 z-50 py-4 bg-bg-surface/80 backdrop-blur-lg border-b border-border-default">
       <Layout>
@@ -36,6 +40,7 @@ const Header: React.FC = () => {
               <LinkIcon size={18} />
               <span>Correlation</span>
             </NavLink>
+            {/* Removed Help button */}
             <ThemeSwitcher />
           </nav>
         </div>

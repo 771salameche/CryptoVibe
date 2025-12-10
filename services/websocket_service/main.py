@@ -1,4 +1,6 @@
+import asyncio
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+from fastapi.middleware.cors import CORSMiddleware
 import logging
 import os
 import json
@@ -23,6 +25,23 @@ app = FastAPI(
     description="Real-time data push for cryptocurrency sentiment and price data.",
     version="0.1.0",
 )
+
+# --- Configuration CORS ---
+origins = [
+    "http://localhost:5174",  # Allow frontend origin
+    "http://127.0.0.1:5174", # Also allow for loopback
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# --- Global variable for the main event loop ---
+main_event_loop = None
 
 class ConnectionManager:
     def __init__(self):
@@ -85,16 +104,10 @@ def rabbitmq_consumer_callback(ch, method, properties, body):
     message = body.decode('utf-8')
     logging.info(f"WebSocket Service: Consumed processed message for broadcast.")
     
-    # We need to run async broadcast in an event loop. FastAPI's app.loop is available at startup.
-    # For a blocking consumer thread, we can create a new event loop or use asyncio.run
-    # if not already in an async context. Since this is in a separate thread,
-    # we need to create a new event loop for it.
-    import asyncio
-    new_loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(new_loop)
-    new_loop.run_until_complete(manager.broadcast(message))
-    new_loop.close()
-    
+    if main_event_loop:
+        # Fire and forget. The broadcast will run in the main event loop.
+        asyncio.run_coroutine_threadsafe(manager.broadcast(message), main_event_loop)
+
     ch.basic_ack(method.delivery_tag)
 
 def start_rabbitmq_consumer():
@@ -116,7 +129,9 @@ def start_rabbitmq_consumer():
 @app.on_event("startup")
 async def startup_event():
     """Event handler for application startup."""
-    logging.info("WebSocket Service: Startup event triggered.")
+    global main_event_loop
+    main_event_loop = asyncio.get_running_loop()
+    logging.info("WebSocket Service: Startup event triggered and main event loop captured.")
     # Start RabbitMQ consumer in a background thread
     consumer_thread = threading.Thread(target=start_rabbitmq_consumer, daemon=True)
     consumer_thread.start()
@@ -131,16 +146,14 @@ async def root():
 async def websocket_endpoint(websocket: WebSocket, client_id: str):
     await manager.connect(websocket)
     try:
-        # This service now primarily broadcasts. It doesn't expect clients to send messages
-        # continuously. The loop is removed.
-        # Keep the connection alive until client disconnects.
+        # Keep the connection alive by sleeping. This avoids waiting for a message that
+        # the client doesn't send, and is more robust.
         while True:
-            # You might optionally listen for specific control messages from the client
-            # e.g., "subscribe to X", "unsubscribe from Y"
-            await websocket.receive_text() # This will keep the connection open
+            await asyncio.sleep(1) # Sleep to keep the connection open
     except WebSocketDisconnect:
         manager.disconnect(websocket)
         logging.info(f"Client #{client_id} disconnected.")
     except Exception as e:
-        logging.error(f"WebSocket error for client {client_id}: {e}")
+        # Log the exception and disconnect the client
+        logging.error(f"WebSocket error for client {client_id}: {e}", exc_info=True)
         manager.disconnect(websocket)

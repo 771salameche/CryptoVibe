@@ -136,10 +136,11 @@ def scrape_subreddit_and_publish(reddit_instance, channel, subreddit_name, limit
 def main():
     logging.info("Starting Ingestion Service (Reddit Scraper)...")
     
-    SUBREDDITS_TO_SCRAPE = ["cryptocurrency"] # Reduced for initial testing
-    POST_LIMIT_PER_SUB = 5   # Reduced for initial testing
-    MIN_POST_SCORE = 5      
-    TOP_COMMENTS_PER_POST = 2
+SUBREDDITS_TO_SCRAPE = os.environ.get("SUBREDDITS_TO_SCRAPE", "cryptocurrency,bitcoin,ethtrader").split(",")
+POST_LIMIT_PER_SUB = int(os.environ.get("POST_LIMIT_PER_SUB", "10"))
+MIN_POST_SCORE = int(os.environ.get("MIN_POST_SCORE", "5"))
+TOP_COMMENTS_PER_POST = int(os.environ.get("TOP_COMMENTS_PER_POST", "2"))
+SCRAPE_INTERVAL_SECONDS = int(os.environ.get("SCRAPE_INTERVAL_SECONDS", "900"))  # 15 minutes default
     
     reddit_instance = connect_to_reddit()
     if reddit_instance is None:
@@ -148,17 +149,20 @@ def main():
     connection, channel = connect_to_rabbitmq(RABBITMQ_HOST)
 
     try:
-        total_items_published = 0
-        for sub_name in SUBREDDITS_TO_SCRAPE:
-            total_items_published += scrape_subreddit_and_publish(
-                reddit_instance=reddit_instance,
-                channel=channel,
-                subreddit_name=sub_name,
-                limit=POST_LIMIT_PER_SUB,
-                min_score=MIN_POST_SCORE,
-                top_comments_n=TOP_COMMENTS_PER_POST
-            )
-        logging.info(f"Ingestion Service finished. Total {total_items_published} items published to RabbitMQ.")
+        while True:
+            total_items_published = 0
+            for sub_name in SUBREDDITS_TO_SCRAPE:
+                total_items_published += scrape_subreddit_and_publish(
+                    reddit_instance=reddit_instance,
+                    channel=channel,
+                    subreddit_name=sub_name,
+                    limit=POST_LIMIT_PER_SUB,
+                    min_score=MIN_POST_SCORE,
+                    top_comments_n=TOP_COMMENTS_PER_POST
+                )
+            logging.info(f"Ingestion Service cycle finished. Total {total_items_published} items published to RabbitMQ.")
+            logging.info(f"Sleeping for {SCRAPE_INTERVAL_SECONDS} seconds before next cycle.")
+            time.sleep(SCRAPE_INTERVAL_SECONDS)
     finally:
         connection.close()
         logging.info("RabbitMQ connection closed.")

@@ -15,6 +15,11 @@ export interface ProcessedMessage {
     label: string;
   };
   processed_at: string;
+  price?: {
+    ticker: string;
+    price: number;
+    as_of: string;
+  } | null;
 }
 
 export const useWebSocket = (

@@ -28,8 +28,8 @@ app = FastAPI(
 
 # --- Configuration CORS ---
 origins = [
-    "http://localhost:5174",  # Allow frontend origin
-    "http://127.0.0.1:5174", # Also allow for loopback
+    "http://localhost:5173",  # Allow frontend origin
+    "http://127.0.0.1:5173", # Also allow for loopback
 ]
 
 app.add_middleware(

@@ -1,10 +1,13 @@
-import pika
 import os
-import logging
-import time
 import json
-import random
-from datetime import datetime # <--- Added this line
+import time
+import logging
+from datetime import datetime
+from typing import Dict, Any, Optional, Set
+
+import pika
+import yfinance as yf
+from transformers import pipeline, Pipeline
 
 # --- Configuration du Logging ---
 logging.basicConfig(
@@ -14,8 +17,12 @@ logging.basicConfig(
 
 # --- Chargement des variables d'environnement ---
 RABBITMQ_HOST = os.environ.get("RABBITMQ_HOST", "rabbitmq")
-RAW_POSTS_QUEUE = os.environ.get("RAW_POSTS_QUEUE", "raw_reddit_posts") # Queue to consume from
-PROCESSED_POSTS_QUEUE = os.environ.get("PROCESSED_POSTS_QUEUE", "processed_reddit_posts") # Queue to publish to
+RAW_POSTS_QUEUE = os.environ.get("RAW_POSTS_QUEUE", "raw_reddit_posts")  # Queue to consume from
+PROCESSED_POSTS_QUEUE = os.environ.get("PROCESSED_POSTS_QUEUE", "processed_reddit_posts")  # Queue to publish to
+PRICE_TICKER = os.environ.get("PRICE_TICKER", "BTC-USD")
+
+# Cache for deduplication to avoid double-processing the same message id
+processed_ids: Set[str] = set()
 
 def connect_to_rabbitmq(host):
     """Connects to RabbitMQ."""
@@ -39,19 +46,58 @@ def connect_to_rabbitmq(host):
     logging.critical("Processing Service: Failed to connect to RabbitMQ after multiple retries.")
     exit(1)
 
-def analyze_sentiment_dummy(text: str) -> dict:
+def load_finbert_pipeline() -> Pipeline:
     """
-    Dummy sentiment analysis function.
-    In a real application, this would use a proper NLP model.
+    Load the FinBERT sentiment analysis pipeline.
+    Using a singleton to avoid reloading weights for every message.
     """
-    score = random.uniform(-1.0, 1.0)
-    if score > 0.3:
-        sentiment = "positive"
-    elif score < -0.3:
-        sentiment = "negative"
-    else:
-        sentiment = "neutral"
-    return {"score": score, "label": sentiment}
+    logging.info("Processing Service: Loading FinBERT model...")
+    return pipeline(
+        "sentiment-analysis",
+        model="ProsusAI/finbert",
+        tokenizer="ProsusAI/finbert",
+        top_k=None,
+    )
+
+
+# Instantiate once at module import to warm cache early
+finbert_analyzer: Pipeline = load_finbert_pipeline()
+
+
+def analyze_sentiment_finbert(text: str) -> Dict[str, Any]:
+    """
+    Run FinBERT sentiment analysis and return the dominant label and its score.
+    """
+    if not text:
+        return {"label": "neutral", "score": 0.0}
+
+    result = finbert_analyzer(text, truncation=True)
+    if isinstance(result, list) and len(result) > 0:
+        # pipeline returns list[dict] with 'label' and 'score'
+        top = sorted(result, key=lambda r: r["score"], reverse=True)[0]
+        return {"label": top["label"].lower(), "score": float(top["score"])}
+    return {"label": "neutral", "score": 0.0}
+
+
+def fetch_latest_price(ticker: str) -> Optional[Dict[str, Any]]:
+    """
+    Fetch the most recent price for the given ticker using yfinance.
+    """
+    try:
+        ticker_obj = yf.Ticker(ticker)
+        # Get last known price from intraday data
+        hist = ticker_obj.history(period="1d", interval="1m")
+        if hist.empty:
+            return None
+        latest = hist.tail(1).iloc[0]
+        return {
+            "ticker": ticker,
+            "price": float(latest["Close"]),
+            "as_of": latest.name.to_pydatetime().isoformat(),
+        }
+    except Exception as e:
+        logging.warning(f"Processing Service: Failed to fetch price for {ticker}: {e}")
+        return None
 
 def callback(ch, method, properties, body):
     """Callback function to process received messages."""
@@ -59,14 +105,24 @@ def callback(ch, method, properties, body):
         raw_message = json.loads(body.decode('utf-8'))
         logging.info(f"Processing Service: Received message (ID: {raw_message.get('id', 'N/A')}): {raw_message.get('text', '')[:50]}...")
 
+        msg_id = raw_message.get("id")
+        if msg_id and msg_id in processed_ids:
+            logging.info(f"Processing Service: Duplicate message detected (ID: {msg_id}), acking without processing.")
+            ch.basic_ack(method.delivery_tag)
+            return
+
         # Perform dummy sentiment analysis
-        sentiment_result = analyze_sentiment_dummy(raw_message.get('text', ''))
+        sentiment_result = analyze_sentiment_finbert(raw_message.get('text', ''))
+
+        # Fetch latest price snapshot
+        price_snapshot = fetch_latest_price(PRICE_TICKER)
         
         # Enrich the message with sentiment data
         processed_message = {
             **raw_message,
             "sentiment": sentiment_result,
-            "processed_at": datetime.now().isoformat()
+            "processed_at": datetime.now().isoformat(),
+            "price": price_snapshot,
         }
 
         # Publish the enriched message to the processed queue
@@ -83,6 +139,8 @@ def callback(ch, method, properties, body):
         # Acknowledge the raw message
         ch.basic_ack(method.delivery_tag)
         logging.info(f"Processing Service: Raw message (ID: {raw_message.get('id', 'N/A')}) acknowledged.")
+        if msg_id:
+            processed_ids.add(msg_id)
 
     except json.JSONDecodeError as e:
         logging.error(f"Processing Service: Failed to decode JSON message: {body}. Error: {e}")

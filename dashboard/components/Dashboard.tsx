@@ -15,14 +15,17 @@ interface DashboardProps {
 const Dashboard: React.FC<DashboardProps> = ({ realtimeData, isWsConnected }) => {
   const [historicalData, setHistoricalData] = useState<ProcessedMessage[]>([]);
   const [loadingHistorical, setLoadingHistorical] = useState(true);
+  const [totalCount, setTotalCount] = useState(0);
 
   useEffect(() => {
     const loadHistoricalData = async () => {
       setLoadingHistorical(true);
-      const data = await dataService.fetchSentimentTimeline();
+      const response = await dataService.fetchSentimentTimeline(500, 0);
+      const data = response.data ?? [];
       // Sort data by date before setting
-      data.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
-      setHistoricalData(data);
+      const sorted = [...data].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+      setHistoricalData(sorted);
+      setTotalCount(response.count ?? sorted.length);
       setLoadingHistorical(false);
     };
 
@@ -36,21 +39,66 @@ const Dashboard: React.FC<DashboardProps> = ({ realtimeData, isWsConnected }) =>
   // Ensure combined data is sorted by date before passing to chart
   combinedData.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
+  const pricePoints = combinedData.filter((msg) => msg.price && typeof msg.price.price === 'number');
+  const priceChange = (() => {
+    if (pricePoints.length < 2) return null;
+    const first = pricePoints[0].price!.price;
+    const last = pricePoints[pricePoints.length - 1].price!.price;
+    if (first === 0) return null;
+    return ((last - first) / first) * 100;
+  })();
+
+  const sentimentPriceCorrelation = (() => {
+    const pairs = combinedData
+      .filter((msg) => msg.price && typeof msg.sentiment?.score === 'number')
+      .map((msg) => ({
+        sentiment: msg.sentiment.score,
+        price: msg.price!.price,
+      }));
+    if (pairs.length < 2) return null;
+    const mean = (arr: number[]) => arr.reduce((a, b) => a + b, 0) / arr.length;
+    const sentiments = pairs.map((p) => p.sentiment);
+    const prices = pairs.map((p) => p.price);
+    const meanSent = mean(sentiments);
+    const meanPrice = mean(prices);
+    const numerator = pairs.reduce((acc, p) => acc + (p.sentiment - meanSent) * (p.price - meanPrice), 0);
+    const denomSent = Math.sqrt(pairs.reduce((acc, p) => acc + (p.sentiment - meanSent) ** 2, 0));
+    const denomPrice = Math.sqrt(pairs.reduce((acc, p) => acc + (p.price - meanPrice) ** 2, 0));
+    const denom = denomSent * denomPrice;
+    if (denom === 0) return null;
+    return numerator / denom;
+  })();
+
+  const latestMsg = combinedData[combinedData.length - 1];
+
   // Aggregate data for the chart (assuming chart expects a specific format)
   const chartData = combinedData.map(msg => ({
     date: msg.date,
     sentiment: msg.sentiment.score,
-    // Add dummy price and mentions for now, as real historical price data isn't integrated yet
-    price: 50000 + (Math.random() * 2000 - 1000), // Placeholder
-    mentions: Math.floor(Math.random() * 1000), // Placeholder
+    price: msg.price?.price ?? 0,
+    mentions: msg.score ?? 0,
   }));
 
   return (
     <div className="py-8">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <KPICard title="Current Sentiment" value="0.58" change="+0.05" trend="improving" icon={<Smile className="text-accent-secondary" />} />
-        <KPICard title="24h Price Change" value="+2.5%" change="+1.5%" trend="improving" icon={<TrendingUp className="text-status-positive" />} />
-        <KPICard title="Sentiment/Price Correlation" value="0.72" icon={<LinkIcon className="text-accent-primary" />} />
+        <KPICard
+          title="Current Sentiment"
+          value={latestMsg ? `${latestMsg.sentiment.label} (${latestMsg.sentiment.score.toFixed(3)})` : "N/A"}
+          trend={latestMsg && latestMsg.sentiment.score >= 0 ? "improving" : "declining"}
+          icon={<Smile className="text-accent-secondary" />}
+        />
+        <KPICard
+          title="24h Price Change"
+          value={priceChange !== null ? `${priceChange.toFixed(2)}%` : "N/A"}
+          trend={priceChange !== null ? (priceChange >= 0 ? "improving" : "declining") : "stable"}
+          icon={<TrendingUp className="text-status-positive" />}
+        />
+        <KPICard
+          title="Sentiment/Price Correlation"
+          value={sentimentPriceCorrelation !== null ? sentimentPriceCorrelation.toFixed(2) : "N/A"}
+          icon={<LinkIcon className="text-accent-primary" />}
+        />
         <KPICard 
           title="WS Status" 
           value={isWsConnected ? "Connected" : "Disconnected"} 

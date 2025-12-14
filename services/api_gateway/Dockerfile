@@ -7,6 +7,9 @@ WORKDIR /app
 COPY services/common/requirements.txt ./requirements.txt
 RUN pip install --default-timeout=600 --no-cache-dir -r requirements.txt
 
+# Ensure data directory exists for SQLite persistence
+RUN mkdir -p /app/data
+
 # Copy the service-specific code
 COPY services/api_gateway/ ./services/api_gateway/
 

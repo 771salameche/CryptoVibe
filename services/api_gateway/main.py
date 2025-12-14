@@ -1,4 +1,4 @@
-from fastapi import FastAPI, BackgroundTasks
+from fastapi import FastAPI, BackgroundTasks, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 import logging
 import os
@@ -6,6 +6,9 @@ import json
 import pika
 import threading
 import time
+import sqlite3
+from pathlib import Path
+from typing import List, Dict, Any, Optional
 from dotenv import load_dotenv
 
 # --- Configuration du Logging ---
@@ -18,6 +21,7 @@ logging.basicConfig(
 load_dotenv()
 RABBITMQ_HOST = os.environ.get("RABBITMQ_HOST", "rabbitmq")
 PROCESSED_POSTS_QUEUE = os.environ.get("PROCESSED_POSTS_QUEUE", "processed_reddit_posts")
+DB_PATH = Path(os.environ.get("DB_PATH", "/app/data/processed.db"))
 
 app = FastAPI(
     title="CryptoVibe API Gateway",
@@ -27,8 +31,8 @@ app = FastAPI(
 
 # --- Configuration CORS ---
 origins = [
-    "http://localhost:5174",  # Allow frontend origin
-    "http://127.0.0.1:5174", # Also allow for loopback
+    "http://localhost:5173",  # Allow frontend origin
+    "http://127.0.0.1:5173",  # Also allow for loopback
 ]
 
 app.add_middleware(
@@ -39,10 +43,85 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# In-memory store for processed data
-processed_data_store = []
-# Lock to ensure thread-safe access to processed_data_store
-data_store_lock = threading.Lock()
+db_lock = threading.Lock()
+
+def init_db():
+    """Initialize SQLite database and table."""
+    DB_PATH.parent.mkdir(parents=True, exist_ok=True)
+    with sqlite3.connect(DB_PATH) as conn:
+        conn.execute(
+            """
+            CREATE TABLE IF NOT EXISTS processed_messages (
+                id TEXT PRIMARY KEY,
+                text TEXT,
+                date TEXT,
+                source TEXT,
+                author TEXT,
+                score REAL,
+                type TEXT,
+                sentiment_label TEXT,
+                sentiment_score REAL,
+                processed_at TEXT,
+                price_ticker TEXT,
+                price REAL,
+                price_as_of TEXT,
+                raw_json TEXT
+            )
+            """
+        )
+        conn.commit()
+
+def save_processed_message(message: Dict[str, Any]):
+    """Persist a processed message into SQLite (idempotent)."""
+    with db_lock, sqlite3.connect(DB_PATH) as conn:
+        conn.execute(
+            """
+            INSERT OR REPLACE INTO processed_messages (
+                id, text, date, source, author, score, type,
+                sentiment_label, sentiment_score, processed_at,
+                price_ticker, price, price_as_of, raw_json
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """,
+            (
+                message.get("id"),
+                message.get("text"),
+                message.get("date"),
+                message.get("source"),
+                message.get("author"),
+                message.get("score"),
+                message.get("type"),
+                message.get("sentiment", {}).get("label"),
+                message.get("sentiment", {}).get("score"),
+                message.get("processed_at"),
+                (message.get("price") or {}).get("ticker") if message.get("price") else None,
+                (message.get("price") or {}).get("price") if message.get("price") else None,
+                (message.get("price") or {}).get("as_of") if message.get("price") else None,
+                json.dumps(message),
+            ),
+        )
+        conn.commit()
+
+def fetch_messages(limit: int = 200, offset: int = 0, sentiment: Optional[str] = None) -> List[Dict[str, Any]]:
+    """Retrieve messages from SQLite with optional sentiment filter."""
+    query = "SELECT raw_json FROM processed_messages"
+    params: List[Any] = []
+    conditions = []
+    if sentiment:
+        conditions.append("LOWER(sentiment_label) = LOWER(?)")
+        params.append(sentiment)
+    if conditions:
+        query += " WHERE " + " AND ".join(conditions)
+    query += " ORDER BY date ASC LIMIT ? OFFSET ?"
+    params.extend([limit, offset])
+
+    with db_lock, sqlite3.connect(DB_PATH) as conn:
+        rows = conn.execute(query, params).fetchall()
+    return [json.loads(r[0]) for r in rows]
+
+def count_messages() -> int:
+    with db_lock, sqlite3.connect(DB_PATH) as conn:
+        row = conn.execute("SELECT COUNT(*) FROM processed_messages").fetchone()
+        return row[0] if row else 0
 
 def connect_to_rabbitmq(host):
     """Connects to RabbitMQ."""
@@ -66,8 +145,7 @@ def rabbitmq_consumer_callback(ch, method, properties, body):
     try:
         message = json.loads(body.decode('utf-8'))
         logging.info(f"API Gateway: Consumed processed message (ID: {message.get('id', 'N/A')}).")
-        with data_store_lock:
-            processed_data_store.append(message)
+        save_processed_message(message)
         ch.basic_ack(method.delivery_tag)
     except json.JSONDecodeError as e:
         logging.error(f"API Gateway: Failed to decode JSON message: {body}. Error: {e}")
@@ -96,6 +174,7 @@ def start_rabbitmq_consumer():
 async def startup_event():
     """Event handler for application startup."""
     logging.info("API Gateway: Startup event triggered.")
+    init_db()
     # Start RabbitMQ consumer in a background thread
     consumer_thread = threading.Thread(target=start_rabbitmq_consumer, daemon=True)
     consumer_thread.start()
@@ -118,12 +197,30 @@ async def health_check():
     except Exception:
         rabbitmq_connected = False
 
-    return {"status": "ok", "rabbitmq_host": RABBITMQ_HOST, "rabbitmq_connected": rabbitmq_connected, "processed_data_count": len(processed_data_store)}
+    db_ok = DB_PATH.exists()
+    message_count = count_messages()
+
+    return {
+        "status": "ok",
+        "rabbitmq_host": RABBITMQ_HOST,
+        "rabbitmq_connected": rabbitmq_connected,
+        "db_path": str(DB_PATH),
+        "db_initialized": db_ok,
+        "processed_data_count": message_count,
+    }
 
 @app.get("/sentiment/timeline")
-async def get_sentiment_timeline():
+async def get_sentiment_timeline(
+    limit: int = Query(200, ge=1, le=1000),
+    offset: int = Query(0, ge=0),
+    sentiment: Optional[str] = Query(None, description="Filter by sentiment label (positive|neutral|negative)"),
+):
     """
-    Returns the accumulated processed sentiment data.
+    Returns processed sentiment data with pagination and optional sentiment filter.
     """
-    with data_store_lock:
-        return {"data": list(processed_data_store)} # Return a copy
+    try:
+        data = fetch_messages(limit=limit, offset=offset, sentiment=sentiment)
+        return {"data": data, "count": count_messages(), "limit": limit, "offset": offset}
+    except Exception as e:
+        logging.error(f"API Gateway: Failed to fetch timeline: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail="Failed to fetch sentiment timeline")

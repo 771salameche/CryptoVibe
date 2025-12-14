@@ -29,7 +29,7 @@ export default {
         card: 'var(--shadow-card)',
       },
       fontFamily: {
-        sans: ['Inter', 'sans-serif'],
+        sans: ['Space Grotesk', 'Inter', 'Segoe UI', 'system-ui', 'sans-serif'],
       },
       keyframes: {
         shimmer: {

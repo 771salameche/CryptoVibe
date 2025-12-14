@@ -5,7 +5,8 @@ import LoadingIndicator from './components/LoadingIndicator';
 import toast, { Toaster } from 'react-hot-toast'; // Import toast
 import Dashboard from './components/Dashboard';
 import Layout from './components/Layout';
-import { useWebSocket, ProcessedMessage } from './src/hooks/useWebSocket'; // Assuming src/hooks is correct path
+import Footer from './components/Footer';
+import { useWebSocket, ProcessedMessage } from './src/hooks/useWebSocket';
 
 const PriceCorrelation = lazy(() => import('./components/PriceCorrelation'));
 
@@ -43,18 +44,21 @@ function App() {
 
   return (
     <Router>
-      <Header />
-      <main>
-        <Layout>
-          <Suspense fallback={<LoadingIndicator />}>
-            <Routes>
-              {/* Pass realtimeData to the Dashboard component */}
-              <Route path="/" element={<Dashboard realtimeData={realtimeData} isWsConnected={isConnected} />} />
-              <Route path="/correlation" element={<PriceCorrelation />} />
-            </Routes>
-          </Suspense>
-        </Layout>
-      </main>
+      <div className="relative min-h-screen overflow-hidden">
+        <div className="app-grid-overlay" aria-hidden />
+        <Header />
+        <main className="relative z-10">
+          <Layout>
+            <Suspense fallback={<LoadingIndicator />}>
+              <Routes>
+                <Route path="/" element={<Dashboard realtimeData={realtimeData} isWsConnected={isConnected} />} />
+                <Route path="/correlation" element={<PriceCorrelation />} />
+              </Routes>
+            </Suspense>
+          </Layout>
+          <Footer />
+        </main>
+      </div>
       <Toaster />
     </Router>
   );

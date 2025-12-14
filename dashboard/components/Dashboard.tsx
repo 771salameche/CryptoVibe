@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useMemo } from 'react';
 import KPICard from './KPICard';
 import SentimentPriceOverlayChart from './charts/SentimentPriceOverlayChart';
 import SentimentBreakdown from './SentimentBreakdown';
 import PostsPanel from './PostsPanel';
-import { Smile, TrendingUp, Link as LinkIcon, Database, Signal } from 'lucide-react';
+import { Smile, TrendingUp, Link as LinkIcon, Signal } from 'lucide-react';
 import { ProcessedMessage } from '../src/hooks/useWebSocket';
-import { dataService } from '../src/api/data';
+import { useSentimentData } from '../src/hooks/useSentimentData';
 
 interface DashboardProps {
   realtimeData: ProcessedMessage[];
@@ -13,61 +13,13 @@ interface DashboardProps {
 }
 
 const Dashboard: React.FC<DashboardProps> = ({ realtimeData, isWsConnected }) => {
-  const [historicalData, setHistoricalData] = useState<ProcessedMessage[]>([]);
-  const [loadingHistorical, setLoadingHistorical] = useState(true);
-  const [totalCount, setTotalCount] = useState(0);
+  const { historicalData, totalCount, loading, metrics } = useSentimentData();
 
-  useEffect(() => {
-    const loadHistoricalData = async () => {
-      setLoadingHistorical(true);
-      const response = await dataService.fetchSentimentTimeline(500, 0);
-      const data = response.data ?? [];
-      // Sort data by date before setting
-      const sorted = [...data].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
-      setHistoricalData(sorted);
-      setTotalCount(response.count ?? sorted.length);
-      setLoadingHistorical(false);
-    };
-
-    loadHistoricalData();
-  }, []);
-
-  // Combine historical and real-time data
-  // For simplicity, real-time data is just appended.
-  // In a real app, you'd merge based on ID/date to avoid duplicates.
-  const combinedData = [...historicalData, ...realtimeData];
-  // Ensure combined data is sorted by date before passing to chart
-  combinedData.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
-
-  const pricePoints = combinedData.filter((msg) => msg.price && typeof msg.price.price === 'number');
-  const priceChange = (() => {
-    if (pricePoints.length < 2) return null;
-    const first = pricePoints[0].price!.price;
-    const last = pricePoints[pricePoints.length - 1].price!.price;
-    if (first === 0) return null;
-    return ((last - first) / first) * 100;
-  })();
-
-  const sentimentPriceCorrelation = (() => {
-    const pairs = combinedData
-      .filter((msg) => msg.price && typeof msg.sentiment?.score === 'number')
-      .map((msg) => ({
-        sentiment: msg.sentiment.score,
-        price: msg.price!.price,
-      }));
-    if (pairs.length < 2) return null;
-    const mean = (arr: number[]) => arr.reduce((a, b) => a + b, 0) / arr.length;
-    const sentiments = pairs.map((p) => p.sentiment);
-    const prices = pairs.map((p) => p.price);
-    const meanSent = mean(sentiments);
-    const meanPrice = mean(prices);
-    const numerator = pairs.reduce((acc, p) => acc + (p.sentiment - meanSent) * (p.price - meanPrice), 0);
-    const denomSent = Math.sqrt(pairs.reduce((acc, p) => acc + (p.sentiment - meanSent) ** 2, 0));
-    const denomPrice = Math.sqrt(pairs.reduce((acc, p) => acc + (p.price - meanPrice) ** 2, 0));
-    const denom = denomSent * denomPrice;
-    if (denom === 0) return null;
-    return numerator / denom;
-  })();
+  // Combine historical and real-time data (append and re-sort)
+  const combinedData = useMemo(() => {
+    const merged = [...historicalData, ...realtimeData];
+    return merged.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+  }, [historicalData, realtimeData]);
 
   const latestMsg = combinedData[combinedData.length - 1];
 
@@ -80,8 +32,28 @@ const Dashboard: React.FC<DashboardProps> = ({ realtimeData, isWsConnected }) =>
   }));
 
   return (
-    <div className="py-8">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <div className="py-4 space-y-8">
+      <div className="rounded-2xl border border-border-default/70 bg-gradient-to-r from-accent-primary/15 via-white/5 to-accent-secondary/10 text-fg-text shadow-card p-6 sm:p-7">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <p className="text-sm uppercase tracking-[0.2em] text-fg-text-muted">Live Intelligence</p>
+            <h1 className="text-2xl sm:text-3xl font-bold text-white mt-1">Real-time Crypto Sentiment & Price Pulse</h1>
+            <p className="text-fg-text-muted max-w-2xl mt-2">
+              Streaming FinBERT sentiment, price snapshots, and Reddit velocity into an interactive command center.
+            </p>
+          </div>
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="inline-flex items-center rounded-full bg-white/10 px-3 py-1 text-xs font-semibold text-white border border-white/15">
+              {isWsConnected ? 'WebSocket Live' : 'WebSocket Offline'}
+            </span>
+            <span className="inline-flex items-center rounded-full bg-fg-text text-slate-900 px-3 py-1 text-xs font-semibold">
+              {totalCount} signals stored
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <KPICard
           title="Current Sentiment"
           value={latestMsg ? `${latestMsg.sentiment.label} (${latestMsg.sentiment.score.toFixed(3)})` : "N/A"}
@@ -90,13 +62,13 @@ const Dashboard: React.FC<DashboardProps> = ({ realtimeData, isWsConnected }) =>
         />
         <KPICard
           title="24h Price Change"
-          value={priceChange !== null ? `${priceChange.toFixed(2)}%` : "N/A"}
-          trend={priceChange !== null ? (priceChange >= 0 ? "improving" : "declining") : "stable"}
+          value={metrics.priceChangePct !== null && metrics.priceChangePct !== undefined ? `${metrics.priceChangePct.toFixed(2)}%` : "N/A"}
+          trend={metrics.priceChangePct !== null && metrics.priceChangePct !== undefined ? (metrics.priceChangePct >= 0 ? "improving" : "declining") : "stable"}
           icon={<TrendingUp className="text-status-positive" />}
         />
         <KPICard
           title="Sentiment/Price Correlation"
-          value={sentimentPriceCorrelation !== null ? sentimentPriceCorrelation.toFixed(2) : "N/A"}
+          value={metrics.sentimentPriceCorrelation !== null && metrics.sentimentPriceCorrelation !== undefined ? metrics.sentimentPriceCorrelation.toFixed(2) : "N/A"}
           icon={<LinkIcon className="text-accent-primary" />}
         />
         <KPICard 
@@ -109,7 +81,7 @@ const Dashboard: React.FC<DashboardProps> = ({ realtimeData, isWsConnected }) =>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 bg-bg-surface backdrop-blur-lg border border-border-default p-6 rounded-lg shadow-card">
           <h2 className="text-xl font-bold mb-4 text-fg-text">Sentiment vs. Price</h2>
-          {loadingHistorical ? (
+          {loading ? (
             <div className="flex items-center justify-center h-48 bg-bg-alt rounded-lg">
               <svg className="animate-spin h-8 w-8 text-accent-primary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
